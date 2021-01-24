@@ -1,0 +1,26 @@
+<resources>
+    <string name="app_name">BrokTrad</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="title_activity_inicial">InicialActivity</string>
+    <!--
+    This string is used for square devices and overridden by hello_world in
+    values-round/strings.xml for round devices.
+    -->
+    <string name="hello_world">Hello Square World!</string>
+    <string name="usuario">Usuario | </string>
+    <string name="clave">Clave | </string>
+    <string name="iniciar">Iniciar</string>
+    <string name="edad">Edad | </string>
+    <string name="broktrad">BrokTrad</string>
+    <string name="email">Email</string>
+    <string name="cuenta">Cuenta</string>
+    <string name="operaciones">Operaciones</string>
+    <string name="ajustes">Ajustes</string>
+    <string name="Requisitos">1 número \n1 letra minúscula \n1 letra mayúscula \n1 caracter especial \n8 caracteres mínimo \nsin espacios</string>
+    <string name="menu_inicio">Inicio</string>
+    <string name="open">Open</string>
+    <string name="close">Close</string>
+    <string name="menu_acciones">Acciones</string>
+    <string name="menu_operaciones">Operaciones</string>
+</resources>
