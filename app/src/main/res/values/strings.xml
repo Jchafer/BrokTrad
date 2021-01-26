@@ -23,4 +23,6 @@
     <string name="close">Close</string>
     <string name="menu_acciones">Acciones</string>
     <string name="menu_operaciones">Operaciones</string>
+    <string name="idioma">Idioma</string>
+    <string name="idiomaAplicacion">Idioma de la aplicacion</string>
 </resources>

@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+    <!--<CheckBoxPreference
+        android:key="reproducirMusica"
+        android:title="Música"
+        android:summary="Escuchar la música mientras se ejecuta la aplicación" />-->
+    <ListPreference
+        android:key="idioma"
+        android:title="@string/idiomaAplicacion"
+        android:summary="@string/idioma"
+        android:dialogTitle="Indicar idioma de la aplicación"
+        android:entries="@array/idioma"
+        android:entryValues="@array/codigoIdioma" />
+    <EditTextPreference
+        android:key="nick"
+        android:title="Nick por defecto"
+        android:summary="Introduzca su nick por defecto"
+        android:dialogTitle="Nick por defecto" />
+    <ListPreference
+        android:key="fuentes_letras"
+        android:title="Tipo de letra"
+        android:summary="Tipo de letra"
+        android:dialogTitle="Indicar el tipo de letra"
+        android:entries="@array/fuentes"
+        android:entryValues="@array/codigoFuentes" />
+</PreferenceScreen>

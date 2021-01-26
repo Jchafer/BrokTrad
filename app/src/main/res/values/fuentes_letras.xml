@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="fuentes">
+        <item>OpenSans</item>
+        <item>Alexandria</item>
+        <item>Bodoni</item>
+        <item>PlayBall</item>
+        <item>Remachine</item>
+    </string-array>
+    <string-array name="codigoFuentes">
+        <item>open</item>
+        <item>alexa</item>
+        <item>bodoni</item>
+        <item>playball</item>
+        <item>remachine</item>
+    </string-array>
+</resources>
