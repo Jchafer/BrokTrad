@@ -8,7 +8,9 @@ import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -39,6 +41,9 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
     private ActionBarDrawerToggle toggle;
     private DrawerLayout drawerLayout;
     private TextView textEmail;
+    private TextView textNick;
+
+    private SharedPreferences prefs;
 
     private BottomNavigationView bottomNavigationView;
     private Fragment frgAcciones;
@@ -50,6 +55,9 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
 
         // Recibir usuario
         usuario = (Usuario) getIntent().getSerializableExtra("Usuario");
+
+        // Obtenemos referencia a las preferencias del usuario
+        prefs = getSharedPreferences("prefersUsuario", Context.MODE_PRIVATE);
 
         // Creación de las acciones de prueba
         accionesTodas = new ArrayList();
@@ -76,7 +84,9 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
         View view = navigationView.getHeaderView(0);
         // Asignar datos usuario
         textEmail = (TextView)view.findViewById(R.id.textEmailNav);
-        textEmail.setText(usuario.getEmail());
+        textEmail.setText(prefs.getString("email", "email@gmail.com"));
+        textNick = (TextView)view.findViewById(R.id.textNickNav);
+        textNick.setText(prefs.getString("nick", "Nick"));
         drawerLayout = (DrawerLayout)findViewById(R.id.drawer);
 
         toggle = new ActionBarDrawerToggle(this, drawerLayout, toolbar, R.string.open, R.string.close);

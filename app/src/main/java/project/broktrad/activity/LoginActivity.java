@@ -2,7 +2,9 @@ package project.broktrad.activity;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -28,15 +30,20 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
     private EditText nombreUsuario;
     private EditText claveUsuario;
+    private EditText nickUsuario;
     private EditText edad;
     private TextView txtEdad;
     private TextView txtRequisitos;
+    private TextView txtNick;
+    private TextView txtAceptar;
     private ImageButton inicioSesion;
     // private RadioButton entrar;
     private RadioButton registrar;
 
     private ArrayList<Usuario> usuarios;
     private Usuario usuario;
+
+    private SharedPreferences prefs;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,9 +63,12 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
         nombreUsuario = findViewById(R.id.editTextUsuario);
         claveUsuario = findViewById(R.id.editTextClave);
+        nickUsuario = findViewById(R.id.editTextNick);
+        txtNick = findViewById(R.id.txtNick);
         edad = findViewById(R.id.editTextEdad);
         txtEdad = findViewById(R.id.txtEdad);
         txtRequisitos = findViewById(R.id.txtRequisitos);
+        txtAceptar = findViewById(R.id.txtAceptar);
         inicioSesion = findViewById(R.id.btAceptar);
         // entrar = findViewById(R.id.radioButtonEntrar);
         registrar = findViewById(R.id.radioButtonRegistrar);
@@ -71,12 +81,22 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
         // Creación de datos usuarios
         usuarios = new ArrayList();
-        usuarios.add(new Usuario("admin@gmail.com", "adminA1@", 18));
-        usuarios.add(new Usuario("sara@hotmail.com", "sara", 20));
-        usuarios.add(new Usuario("pepe@gmail.com", "pepe", 32));
-        usuarios.add(new Usuario("marta@hotmail.es", "marta", 25));
-        usuarios.add(new Usuario("raul@hotmail.com", "raul", 38));
+        usuarios.add(new Usuario("admin@gmail.com", "adminA1@", "admin", 18));
+        usuarios.add(new Usuario("sara@hotmail.com", "sara", "Sary", 20));
+        usuarios.add(new Usuario("pepe@gmail.com", "pepe", "Pep", 32));
+        usuarios.add(new Usuario("marta@hotmail.es", "marta", "Martuchi", 25));
+        usuarios.add(new Usuario("raul@hotmail.com", "raul", "Raul", 38));
 
+        prefs = getSharedPreferences("prefersUsuario", Context.MODE_PRIVATE);
+
+    }
+
+    private void saveOnPreferences(String email, String password, String nick) {
+        SharedPreferences.Editor editor = prefs.edit();
+        editor.putString("email", email);
+        editor.putString("password", password);
+        editor.putString("nick", nick);
+        editor.apply();
     }
 
     @Override
@@ -84,6 +104,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
         String emailPasada = nombreUsuario.getText().toString();
         String clavePasada = claveUsuario.getText().toString();
+        String nickPasado = nickUsuario.getText().toString();
         String edadPasada = edad.getText().toString();
         int edadPasadaInt = 0;
 
@@ -93,6 +114,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             if (usuario != null) {
                 Intent intent = new Intent(view.getContext(), MainActivity.class);
                 intent.putExtra("Usuario", usuario);
+                saveOnPreferences(usuario.getEmail(), usuario.getClave(), usuario.getNick());
                 startActivity(intent);
             } else {
                 Toast.makeText(this, "Usuario incorrecto", Toast.LENGTH_SHORT).show();
@@ -102,9 +124,9 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 edadPasadaInt = Integer.parseInt(edadPasada);
             }
 
-            switch (comprobaciones(emailPasada, edadPasadaInt, clavePasada)){
+            switch (comprobaciones(emailPasada, clavePasada, edadPasadaInt)){
                 case 0:
-                    usuario = new Usuario(emailPasada, clavePasada, edadPasadaInt);
+                    usuario = new Usuario(emailPasada, clavePasada, nickPasado, edadPasadaInt);
                     usuarios.add(usuario);
                     Intent intent = new Intent(view.getContext(), MainActivity.class);
                     intent.putExtra("Usuario", usuario);
@@ -146,9 +168,13 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         if(isChecked){
             edad.setVisibility(View.VISIBLE);
             txtEdad.setVisibility(View.VISIBLE);
+            nickUsuario.setVisibility(View.VISIBLE);
+            txtNick.setVisibility(View.VISIBLE);
         }else{
             edad.setVisibility(View.GONE);
             txtEdad.setVisibility(View.GONE);
+            nickUsuario.setVisibility(View.GONE);
+            txtNick.setVisibility(View.GONE);
             txtRequisitos.setVisibility(View.GONE);
         }
 
@@ -163,7 +189,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         return null;
     }
 
-    public int comprobaciones(String email, int edad, String clave){
+    public int comprobaciones(String email, String clave, int edad){
         // Si existe el usuario devuelve 1
         if (comprobarUsuarioExiste(email))
             return 1;

@@ -6,15 +6,17 @@ public class Usuario implements Serializable {
 
     private String email;
     private String clave;
+    private String nick;
     private int edad;
     private float saldo;
 
     public Usuario() {
     }
 
-    public Usuario(String email, String clave, int edad) {
+    public Usuario(String email, String clave, String nick, int edad) {
         this.email = email;
         this.clave = clave;
+        this.nick = nick;
         this.edad = edad;
         this.saldo = 10000;
     }
@@ -33,6 +35,14 @@ public class Usuario implements Serializable {
 
     public void setClave(String clave) {
         this.clave = clave;
+    }
+
+    public String getNick() {
+        return nick;
+    }
+
+    public void setNick(String nick) {
+        this.nick = nick;
     }
 
     public int getEdad() {
@@ -56,6 +66,7 @@ public class Usuario implements Serializable {
         return "Usuario{" +
                 "email='" + email + '\'' +
                 ", clave='" + clave + '\'' +
+                ", nick='" + nick + '\'' +
                 ", edad=" + edad +
                 ", saldo=" + saldo +
                 '}';

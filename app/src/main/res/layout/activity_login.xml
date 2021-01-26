@@ -134,7 +134,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.45" />
+        app:layout_constraintGuide_percent="0.4" />
 
     <TextView
         android:id="@+id/txtClave"
@@ -192,6 +192,43 @@
         app:layout_constraintGuide_percent="0.6" />
 
     <TextView
+        android:id="@+id/txtNick"
+        style="@style/Widget.AppCompat.TextView.SpinnerItem"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:layout_weight="1"
+        android:gravity="center"
+        android:padding="5dp"
+        android:text="@string/nick"
+        android:textColor="#000000"
+        android:textSize="25sp"
+        android:textStyle="bold"
+        android:visibility="gone"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/txtRequisitos" />
+
+    <EditText
+        android:id="@+id/editTextNick"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:layout_weight="0"
+        android:ems="10"
+        android:gravity="center"
+        android:hint="Nick"
+        android:inputType="number"
+        android:padding="5dp"
+        android:textColor="#40A634"
+        android:textSize="25sp"
+        android:textStyle="bold"
+        android:visibility="gone"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toEndOf="@id/txtEdad"
+        app:layout_constraintTop_toBottomOf="@id/txtRequisitos" />
+
+    <TextView
         android:id="@+id/txtEdad"
         style="@style/Widget.AppCompat.TextView.SpinnerItem"
         android:layout_width="wrap_content"
@@ -206,7 +243,7 @@
         android:textStyle="bold"
         android:visibility="gone"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/txtRequisitos" />
+        app:layout_constraintTop_toBottomOf="@id/txtNick" />
 
     <EditText
         android:id="@+id/editTextEdad"
@@ -226,19 +263,19 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toEndOf="@id/txtEdad"
-        app:layout_constraintTop_toBottomOf="@id/txtRequisitos" />
+        app:layout_constraintTop_toBottomOf="@id/editTextNick" />
 
     <ImageButton
         android:id="@+id/btAceptar"
         android:layout_width="163dp"
         android:layout_height="77dp"
-        android:scaleType="center"
         android:background="@drawable/radius_verde"
+        android:scaleType="center"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.491"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editTextClave"
+        app:layout_constraintTop_toBottomOf="@+id/editTextEdad"
         app:layout_constraintVertical_bias="0.759" />
 
     <TextView
