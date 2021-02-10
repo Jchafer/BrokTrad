@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/background_blue"
+    android:background="@drawable/fondo_azul"
     tools:context=".activity.LoginActivity">
 
     <LinearLayout
@@ -106,7 +106,7 @@
         android:hint="email@gmail.com"
         android:inputType="textEmailAddress"
         android:padding="5dp"
-        android:textColor="#40A634"
+        android:textColor="#000939"
         android:textSize="25sp"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
@@ -163,7 +163,7 @@
         android:hint="******"
         android:inputType="textPersonName|textCapCharacters"
         android:padding="5dp"
-        android:textColor="#40A634"
+        android:textColor="#000939"
         android:textSize="25sp"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
@@ -217,18 +217,17 @@
         android:ems="10"
         android:gravity="center"
         android:hint="Nick"
-        android:inputType="number"
         android:padding="5dp"
-        android:textColor="#40A634"
+        android:textColor="#000939"
         android:textSize="25sp"
         android:textStyle="bold"
         android:visibility="gone"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toEndOf="@id/txtEdad"
+        app:layout_constraintStart_toEndOf="@id/btAceptar"
         app:layout_constraintTop_toBottomOf="@id/txtRequisitos" />
 
-    <TextView
+    <!--<TextView
         android:id="@+id/txtEdad"
         style="@style/Widget.AppCompat.TextView.SpinnerItem"
         android:layout_width="wrap_content"
@@ -263,22 +262,27 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toEndOf="@id/txtEdad"
-        app:layout_constraintTop_toBottomOf="@id/editTextNick" />
+        app:layout_constraintTop_toBottomOf="@id/editTextNick" />-->
 
-    <ImageButton
+    <Button
         android:id="@+id/btAceptar"
         android:layout_width="163dp"
         android:layout_height="77dp"
-        android:background="@drawable/radius_verde"
+        android:background="@drawable/boton_azulado_claro"
         android:scaleType="center"
+        android:text="Iniciar"
+        android:textAppearance="@style/TextAppearance.AppCompat.Large"
+        android:textSize="30sp"
+        android:textStyle="bold"
+        android:typeface="serif"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.491"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editTextEdad"
+        app:layout_constraintTop_toBottomOf="@+id/editTextNick"
         app:layout_constraintVertical_bias="0.759" />
 
-    <TextView
+    <!--<TextView
         android:id="@+id/txtAceptar"
         android:layout_width="167dp"
         android:layout_height="111dp"
@@ -292,6 +296,6 @@
         app:layout_constraintBottom_toBottomOf="@+id/btAceptar"
         app:layout_constraintEnd_toEndOf="@+id/btAceptar"
         app:layout_constraintStart_toStartOf="@+id/btAceptar"
-        app:layout_constraintTop_toTopOf="@+id/btAceptar" />
+        app:layout_constraintTop_toTopOf="@+id/btAceptar" />-->
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,24 +1,42 @@
 package project.broktrad.pojo;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 
 public class Usuario implements Serializable {
 
     private String email;
     private String clave;
     private String nick;
-    private int edad;
-    private float saldo;
+    private boolean admin;
+    private ArrayList<Gasolinera> favoritos;
 
     public Usuario() {
+        this.favoritos = new ArrayList();
     }
 
-    public Usuario(String email, String clave, String nick, int edad) {
+    public Usuario(String email) {
+        this.email = email;
+        this.clave = null;
+        this.nick = null;
+        this.admin = false;
+        this.favoritos = new ArrayList();
+    }
+
+    public Usuario(String email, String clave, String nick) {
         this.email = email;
         this.clave = clave;
         this.nick = nick;
-        this.edad = edad;
-        this.saldo = 10000;
+        this.admin = false;
+        this.favoritos = new ArrayList();
+    }
+
+    public Usuario(String email, String clave) {
+        this.email = email;
+        this.clave = clave;
+        this.nick = null;
+        this.admin = false;
+        this.favoritos = new ArrayList();
     }
 
     public String getEmail() {
@@ -45,20 +63,20 @@ public class Usuario implements Serializable {
         this.nick = nick;
     }
 
-    public int getEdad() {
-        return edad;
+    public ArrayList<Gasolinera> getFavoritos() {
+        return favoritos;
     }
 
-    public void setEdad(int edad) {
-        this.edad = edad;
+    public void setFavoritos(ArrayList<Gasolinera> favoritos) {
+        this.favoritos = favoritos;
     }
 
-    public float getSaldo() {
-        return saldo;
+    public boolean isAdmin() {
+        return admin;
     }
 
-    public void setSaldo(float saldo) {
-        this.saldo = saldo;
+    public void setAdmin(boolean admin) {
+        this.admin = admin;
     }
 
     @Override
@@ -67,8 +85,6 @@ public class Usuario implements Serializable {
                 "email='" + email + '\'' +
                 ", clave='" + clave + '\'' +
                 ", nick='" + nick + '\'' +
-                ", edad=" + edad +
-                ", saldo=" + saldo +
                 '}';
     }
 }

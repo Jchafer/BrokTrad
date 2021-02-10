@@ -5,6 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:id="@+id/drawer"
+    android:background="@drawable/fondo_azul_2"
     tools:openDrawer="start"
     tools:context=".activity.MainActivity">
 
@@ -22,22 +23,22 @@
         <FrameLayout
             android:id="@+id/contenedor"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_above="@+id/menu_navigation"
+            android:layout_height="match_parent"
             android:layout_below="@+id/toolbar"
+            android:layout_alignParentBottom="true"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <com.google.android.material.bottomnavigation.BottomNavigationView
+        <!--<com.google.android.material.bottomnavigation.BottomNavigationView
             android:id="@+id/menu_navigation"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
             android:layout_gravity="bottom"
             android:background="?android:attr/windowBackground"
-            app:menu="@menu/menu_navigation" />
+            app:menu="@menu/menu_navigation" />-->
 
     </RelativeLayout>
 
@@ -46,9 +47,9 @@
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         app:menu="@menu/menu_main_drawer"
+        android:background="@drawable/fondo_azul_4"
         app:headerLayout="@layout/navheader"
         android:layout_gravity="start"/>
-         />
 
 
 </androidx.drawerlayout.widget.DrawerLayout>

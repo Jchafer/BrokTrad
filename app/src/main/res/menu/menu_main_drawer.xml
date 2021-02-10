@@ -1,12 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
         <item
-            android:id="@+id/nav_acciones"
-            android:icon="@drawable/ic_baseline_home"
-            android:title="@string/menu_acciones" />
+            android:id="@+id/nav_buscador"
+            android:icon="@drawable/ic_baseline_search_24"
+            android:title="@string/nav_buscador" />
         <item
-            android:id="@+id/nav_operaciones"
-            android:icon="@drawable/ic_baseline_home"
-            android:title="@string/menu_operaciones" />
+            android:id="@+id/nav_favoritas"
+            android:icon="@drawable/ic_baseline_favorite_24"
+            android:title="@string/menu_favoritas" />
+        <item
+            android:id="@+id/nav_actualizar"
+            android:icon="@drawable/ic_baseline_system_update_24"
+            android:title="@string/menu_actualizar" />
 
 </menu>

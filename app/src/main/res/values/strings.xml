@@ -26,4 +26,9 @@
     <string name="idioma">Idioma</string>
     <string name="idiomaAplicacion">Idioma de la aplicacion</string>
     <string name="nick">Nick | </string>
+    <string name="menu_gasolineras">Gasolineras</string>
+    <string name="menu_actualizar">Actualizar</string>
+    <string name="menu_favoritas">Favoritas</string>
+    <string name="nav_buscador">Buscador</string>
+    <string name="title_activity_maps">Map</string>
 </resources>

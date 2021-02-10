@@ -2,15 +2,14 @@ package project.broktrad.activity;
 
 import androidx.appcompat.app.AppCompatActivity;
 import project.broktrad.R;
-import project.broktrad.pojo.Accion;
-import project.broktrad.pojo.Usuario;
+import project.broktrad.pojo.Gasolinera;
 
 import android.os.Bundle;
 import android.widget.TextView;
 
 public class OperarActivity extends AppCompatActivity {
 
-    private Accion accion;
+    private Gasolinera gasolinera;
     private TextView texto;
 
     @Override
@@ -20,9 +19,9 @@ public class OperarActivity extends AppCompatActivity {
 
         texto = findViewById(R.id.textView5);
 
-        // Recibir accion
-        accion = (Accion) getIntent().getSerializableExtra("Accion");
+        // Recibir gasolinera
+        gasolinera = (Gasolinera) getIntent().getSerializableExtra("Gasolinera");
 
-        texto.setText(texto.getText() + " " + accion.getNombre());
+        texto.setText(texto.getText() + " " + gasolinera.getDireccion());
     }
 }
