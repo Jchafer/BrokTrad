@@ -1,23 +1,18 @@
 package project.broktrad.fragment;
 
-import android.os.Build;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentTransaction;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
-import android.widget.Toast;
 
 import java.util.ArrayList;
 
 import project.broktrad.R;
-import project.broktrad.adapter.AdapterFavoritos;
 import project.broktrad.adapter.AdapterGasolineras;
 import project.broktrad.pojo.Gasolinera;
 

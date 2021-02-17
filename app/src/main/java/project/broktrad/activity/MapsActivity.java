@@ -1,4 +1,4 @@
-package project.broktrad;
+package project.broktrad.activity;
 
 import androidx.fragment.app.FragmentActivity;
 
@@ -8,12 +8,19 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+
+import project.broktrad.R;
+import project.broktrad.pojo.Gasolinera;
+import project.broktrad.pojo.Usuario;
 
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback {
 
     private GoogleMap mMap;
+    private Gasolinera gasolinera;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -23,6 +30,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
+
+        gasolinera = (Gasolinera) getIntent().getSerializableExtra("gasolinera");
     }
 
     /**
@@ -37,10 +46,15 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
+        double lat = Double.parseDouble(gasolinera.getLatitud().replaceAll(",", "."));
+        double lng = Double.parseDouble(gasolinera.getLongitud().replaceAll(",", "."));
 
         // Add a marker in Sydney and move the camera
-        LatLng sydney = new LatLng(-34, 151);
-        mMap.addMarker(new MarkerOptions().position(sydney).title("Marker in Sydney"));
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
+        LatLng gasolineraMarker = new LatLng(lat, lng);
+        mMap.addMarker(new MarkerOptions().position(gasolineraMarker).title("Gasolinera " +
+                gasolinera.getRotulo()).snippet(gasolinera.getMunicipio() + " " + gasolinera.getDireccion()));
+        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(gasolineraMarker, 16.0f));
+        mMap.setMapType(GoogleMap.MAP_TYPE_HYBRID);
+
     }
 }

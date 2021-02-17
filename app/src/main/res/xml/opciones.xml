@@ -8,19 +8,29 @@
         android:key="idioma"
         android:title="@string/idiomaAplicacion"
         android:summary="@string/idioma"
-        android:dialogTitle="Indicar idioma de la aplicación"
+        android:dialogTitle="@string/indicarIdiomaAplicacion"
         android:entries="@array/idioma"
         android:entryValues="@array/codigoIdioma" />
     <EditTextPreference
+        android:key="email"
+        android:title="@string/cambiar_correo"
+        android:summary="@string/introducir_correo"
+        android:dialogTitle="@string/nuevo_correo" />
+    <EditTextPreference
+        android:key="password"
+        android:title="@string/cambiar_pass"
+        android:summary="@string/introducir_pass"
+        android:dialogTitle="@string/nuevo_pass" />
+    <EditTextPreference
         android:key="nick"
-        android:title="Nick por defecto"
-        android:summary="Introduzca su nick por defecto"
-        android:dialogTitle="Nick por defecto" />
-    <ListPreference
+        android:title="@string/cambiar_nick"
+        android:summary="@string/introducir_nick"
+        android:dialogTitle="@string/nuevo_nick" />
+    <!--<ListPreference
         android:key="fuentes_letras"
         android:title="Tipo de letra"
         android:summary="Tipo de letra"
         android:dialogTitle="Indicar el tipo de letra"
         android:entries="@array/fuentes"
-        android:entryValues="@array/codigoFuentes" />
+        android:entryValues="@array/codigoFuentes" />-->
 </PreferenceScreen>

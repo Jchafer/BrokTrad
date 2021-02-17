@@ -1,15 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    android:layout_height="match_parent">
 
     <androidx.cardview.widget.CardView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:layout_height="180dp"
         android:layout_gravity="center|top"
-        android:layout_margin="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
         android:layout_marginBottom="8dp"
         app:cardCornerRadius="10dp">
 
@@ -19,8 +21,8 @@
 
             <androidx.cardview.widget.CardView
                 android:id="@+id/cardView"
-                android:layout_width="394dp"
-                android:layout_height="190dp"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
                 app:cardBackgroundColor="@android:color/transparent"
                 app:cardCornerRadius="5dp"
                 app:cardElevation="3dp"
@@ -41,18 +43,19 @@
                         <TextView
                             android:id="@+id/txtRotulo"
                             style="@android:style/Widget.DeviceDefault.Light.TextView"
-                            android:layout_width="242dp"
+                            android:layout_width="220dp"
                             android:layout_height="100dp"
                             android:layout_margin="10dp"
+                            android:gravity="center|top"
                             android:padding="10dp"
                             android:text="TextView"
                             android:textColor="#011368"
-                            android:textSize="30sp"
+                            android:textSize="24sp"
                             android:textStyle="bold" />
 
                         <TextView
                             android:id="@+id/txtDireccion"
-                            android:layout_width="242dp"
+                            android:layout_width="220dp"
                             android:layout_height="match_parent"
                             android:layout_marginLeft="10dp"
                             android:layout_marginRight="10dp"
@@ -83,8 +86,9 @@
                             android:layout_width="match_parent"
                             android:layout_height="95dp"
                             android:layout_marginTop="20px"
+                            android:layout_marginRight="10dp"
                             android:layout_weight="1"
-                            android:text="Gasolina 95"
+                            android:text="@string/gasolina_95"
                             android:textSize="18sp"
                             android:textStyle="bold" />
 
@@ -92,19 +96,21 @@
                             android:id="@+id/txtPrecioGas95"
                             android:layout_width="match_parent"
                             android:layout_height="125dp"
+                            android:layout_marginRight="10dp"
                             android:layout_weight="1"
                             android:gravity="center|top"
                             android:text="TextView"
                             android:textColor="#000000"
-                            android:textSize="24sp"
+                            android:textSize="30sp"
                             android:textStyle="bold" />
 
                         <TextView
                             android:id="@+id/txtGasA"
                             android:layout_width="match_parent"
                             android:layout_height="95dp"
+                            android:layout_marginRight="10dp"
                             android:layout_weight="1"
-                            android:text="Gasoleo A"
+                            android:text="@string/gasoleo_a"
                             android:textSize="18sp"
                             android:textStyle="bold" />
 
@@ -112,11 +118,13 @@
                             android:id="@+id/txtPrecioGasA"
                             android:layout_width="match_parent"
                             android:layout_height="125dp"
+                            android:layout_marginRight="10dp"
+                            android:layout_marginBottom="10dp"
                             android:layout_weight="1"
                             android:gravity="center|top"
                             android:text="TextView"
                             android:textColor="#000000"
-                            android:textSize="24sp"
+                            android:textSize="30sp"
                             android:textStyle="bold" />
 
                     </androidx.appcompat.widget.LinearLayoutCompat>

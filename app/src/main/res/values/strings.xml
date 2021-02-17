@@ -1,34 +1,49 @@
 <resources>
     <string name="app_name">BrokTrad</string>
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
-    <string name="title_activity_inicial">InicialActivity</string>
-    <!--
-    This string is used for square devices and overridden by hello_world in
-    values-round/strings.xml for round devices.
-    -->
-    <string name="hello_world">Hello Square World!</string>
     <string name="usuario">Usuario | </string>
     <string name="clave">Clave | </string>
-    <string name="iniciar">Iniciar</string>
-    <string name="edad">Edad | </string>
+    <string name="botonIniciar">Iniciar sesión</string>
     <string name="broktrad">BrokTrad</string>
-    <string name="email">Email</string>
+    <string name="email">Correo</string>
     <string name="cuenta">Cuenta</string>
-    <string name="operaciones">Operaciones</string>
-    <string name="ajustes">Ajustes</string>
-    <string name="Requisitos">1 número \n1 letra minúscula \n1 letra mayúscula \n1 caracter especial \n8 caracteres mínimo \nsin espacios</string>
+    <string name="Requisitos">1 Número \n1 Letra minúscula \n1 Letra mayúscula \n1 Caracter especial \n8 Caracteres mínimo \nSin espacios</string>
     <string name="menu_inicio">Inicio</string>
     <string name="open">Open</string>
     <string name="close">Close</string>
-    <string name="menu_acciones">Acciones</string>
-    <string name="menu_operaciones">Operaciones</string>
-    <string name="idioma">Idioma</string>
-    <string name="idiomaAplicacion">Idioma de la aplicacion</string>
     <string name="nick">Nick | </string>
-    <string name="menu_gasolineras">Gasolineras</string>
     <string name="menu_actualizar">Actualizar</string>
     <string name="menu_favoritas">Favoritas</string>
-    <string name="nav_buscador">Buscador</string>
+    <string name="menu_buscador">Buscador</string>
     <string name="title_activity_maps">Map</string>
+    <string name="menu_ajustes">Ajustes</string>
+    <string name="iniciar">Iniciar</string>
+    <string name="registrar">Registrar</string>
+    <string name="buscar">Buscar</string>
+    <string name="introduce_municipio">Introduce municipio</string>
+    <string name="municipio">Municipio</string>
+    <string name="idioma">Idioma</string>
+    <string name="idiomaAplicacion">Idioma de la aplicacion</string>
+    <string name="indicarIdiomaAplicacion">Indicar idioma de la aplicación</string>
+    <string name="cambiar_correo">Cambiar correo</string>
+    <string name="introducir_correo">Introduzca el nuevo correo</string>
+    <string name="nuevo_correo">Nuevo correo</string>
+    <string name="cambiar_pass">Cambiar contraseña</string>
+    <string name="introducir_pass">Introduzca la nueva contraseña</string>
+    <string name="nuevo_pass">Nueva contraseña</string>
+    <string name="cambiar_nick">Cambiar nick</string>
+    <string name="introducir_nick">Introduzca el nuevo nick</string>
+    <string name="nuevo_nick">Nuevo nick</string>
+    <string name="ningun_municipio">No se encontró ningún municipio con ese nombre</string>
+    <string name="no_disponible">No disponible</string>
+    <string name="datos_actualizados">Datos actualizados a fecha</string>
+    <string name="gasolina_95">Gasolina 95</string>
+    <string name="gasoleo_a">Gasoleo A</string>
+    <string name="gasolina_98">Gasolina 98</string>
+    <string name="gasoleo_p">Gasoleo P</string>
+    <string name="provincia">Provincia</string>
+    <string name="codigo_postal">Código Postal</string>
+    <string name="horario">Horario</string>
+    <string name="anadir_favorito">Añadir Favorito</string>
+    <string name="ir_a_mapa">Ir a mapa</string>
+    <string name="cerrar_sesion">Cerrar sesión</string>
 </resources>

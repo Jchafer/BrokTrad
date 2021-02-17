@@ -1,16 +1,35 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
-        <item
-            android:id="@+id/nav_buscador"
-            android:icon="@drawable/ic_baseline_search_24"
-            android:title="@string/nav_buscador" />
-        <item
-            android:id="@+id/nav_favoritas"
-            android:icon="@drawable/ic_baseline_favorite_24"
-            android:title="@string/menu_favoritas" />
-        <item
-            android:id="@+id/nav_actualizar"
-            android:icon="@drawable/ic_baseline_system_update_24"
-            android:title="@string/menu_actualizar" />
+        <group
+            android:id="@+id/menu_top"
+            android:checkableBehavior="single">
+                <item
+                    android:id="@+id/nav_buscador"
+                    android:icon="@drawable/ic_baseline_search_24"
+                    android:title="@string/menu_buscador" />
+                <item
+                    android:id="@+id/nav_favoritas"
+                    android:icon="@drawable/ic_baseline_favorite_24"
+                    android:title="@string/menu_favoritas" />
+                <item
+                    android:id="@+id/nav_actualizar"
+                    android:icon="@drawable/ic_baseline_system_update_24"
+                    android:title="@string/menu_actualizar" />
+        </group>
+
+        <group
+            android:id="@+id/menu_bottom"
+            android:checkableBehavior="none">
+                <item
+                    android:id="@+id/nav_ajustes"
+                    android:icon="@drawable/ic_baseline_settings_24"
+                    android:title="@string/menu_ajustes" />
+                <item
+                    android:id="@+id/nav_cerrar_sersion"
+                    android:icon="@drawable/ic_baseline_login_24"
+                    android:title="@string/cerrar_sesion" />
+        </group>
+
+
 
 </menu>

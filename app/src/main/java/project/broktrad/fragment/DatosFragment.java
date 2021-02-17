@@ -9,6 +9,7 @@ import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,7 +17,7 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import project.broktrad.MapsActivity;
+import project.broktrad.activity.MapsActivity;
 import project.broktrad.R;
 import project.broktrad.dao.FavoritoDAO;
 import project.broktrad.pojo.Gasolinera;
@@ -134,7 +135,13 @@ public class DatosFragment extends Fragment {
         provincia.setText(gasolinera.getProvincia());
         municipio.setText(gasolinera.getMunicipio());
         codPostal.setText(gasolinera.getCodPostal());
-        horario.setText(gasolinera.getHorario());
+        String[] textoHorarioFormat = gasolinera.getHorario().split("; ");
+        String textoFormateado = "";
+        for (String horarioLinea : textoHorarioFormat) {
+            textoFormateado += "\n" + horarioLinea;
+        }
+
+        horario.setText(textoFormateado);
 
         Button btnFavorito = (Button) myInflatedView.findViewById(R.id.buttonFavorito);
 

@@ -68,7 +68,7 @@ public class UsuarioDAO {
     }
 
     public long update(ContentValues contentValues) {
-        String condicion = C_COLUMNA_ID_EMAIL + "=" + contentValues.getAsString(C_COLUMNA_ID_EMAIL);
+        String condicion = C_COLUMNA_ID_EMAIL + "='" + contentValues.getAsString(C_COLUMNA_ID_EMAIL) + "'";
 
         int resultado = db.update(C_TABLA, contentValues, condicion, null);
 

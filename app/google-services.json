@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "380756636109",
+    "project_id": "coastal-mender-304410",
+    "storage_bucket": "coastal-mender-304410.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:380756636109:android:750a77a6b7066521a05484",
+        "android_client_info": {
+          "package_name": "project.broktrad"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "380756636109-mugcb9v75229vekf8uvs39lfsqnfkpbk.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDzIvgJ2OJ6TTixeC-SADtbff9oWbJYYJw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "380756636109-mugcb9v75229vekf8uvs39lfsqnfkpbk.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

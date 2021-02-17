@@ -88,7 +88,7 @@ public class BuscadorFragment extends Fragment {
 
                 ArrayList<Gasolinera> gasolineras = gas.gasolinerasPorMunicipio(municipioIntroducido);
                 if (gasolineras == null)
-                    Log.e("//////", " No se encontraron gasolineras ");
+                    Toast.makeText(getActivity(), R.string.ningun_municipio, Toast.LENGTH_SHORT).show();
                 else{
                     Fragment frgGasolineras = new GasolinerasFragment();
                     Bundle args = new Bundle();

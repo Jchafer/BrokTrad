@@ -9,6 +9,6 @@
     <item
         android:id="@+id/action_ajustes"
         android:orderInCategory="2"
-        android:title="@string/ajustes"
+        android:title="@string/menu_ajustes"
         app:showAsAction="never"></item>
 </menu>

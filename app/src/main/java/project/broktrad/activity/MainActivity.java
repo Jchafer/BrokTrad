@@ -12,9 +12,11 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.res.Configuration;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.os.StrictMode;
+import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -44,6 +46,7 @@ import java.net.URL;
 import java.net.URLConnection;
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.Locale;
 
 import project.broktrad.R;
 import project.broktrad.bd.MiBD;
@@ -79,6 +82,9 @@ public class MainActivity extends AppCompatActivity {
     private Cursor cursor;
     private MiBDOperacional miBDOperacional;
     private MiBD miBD;
+
+    SharedPreferences prefsManager;
+    Locale localizacion;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -121,12 +127,11 @@ public class MainActivity extends AppCompatActivity {
         navigationView = (NavigationView)findViewById(R.id.nav_view);
 
         View view = navigationView.getHeaderView(0);
-        // Asignar datos usuario
-        textEmail = (TextView)view.findViewById(R.id.textEmailNav);
-        textEmail.setText(prefs.getString("email", "email@gmail.com"));
-        textNick = (TextView)view.findViewById(R.id.textNickNav);
-        textNick.setText(prefs.getString("nick", "Nick"));
+        textEmail = (TextView) view.findViewById(R.id.textEmailNav);
+        textNick = (TextView) view.findViewById(R.id.textNickNav);
         drawerLayout = (DrawerLayout)findViewById(R.id.drawer);
+
+        cargaDatos();
 
         toggle = new ActionBarDrawerToggle(this, drawerLayout, toolbar, R.string.open, R.string.close);
         drawerLayout.addDrawerListener(toggle);
@@ -154,14 +159,26 @@ public class MainActivity extends AppCompatActivity {
 
                         args.putSerializable("GasolinerasFavoritas", gasolinerasFavoritas);
                         fragment.setArguments(args);
-                        getSupportFragmentManager().beginTransaction().replace(R.id.contenedor, fragment).commit();
+                        getSupportFragmentManager().beginTransaction().replace(R.id.contenedor, fragment).addToBackStack(null).commit();
                         //bottomNavigationView.setVisibility(View.INVISIBLE);
                         drawerLayout.closeDrawer(GravityCompat.START);
                         break;
                     case R.id.nav_actualizar:
                         guardar();
                         leer();
-                        Toast.makeText(MainActivity.this, "Datos actualizados a fecha: " + prefs.getString("fecha_Actualizacion", "No disponible"), Toast.LENGTH_SHORT).show();
+                        Toast.makeText(MainActivity.this, R.string.datos_actualizados, Toast.LENGTH_SHORT).show();
+                        Toast.makeText(MainActivity.this, prefs.getString("fecha_Actualizacion", String.valueOf(R.string.no_disponible)), Toast.LENGTH_LONG).show();
+                        break;
+                    case R.id.nav_ajustes:
+                        Intent intentAjustes = new Intent();
+                        intentAjustes.setClass(MainActivity.this, AjustesActivity.class);
+                        intentAjustes.putExtra("Usuario", usuario);
+                        startActivity(intentAjustes);
+                        break;
+                    case R.id.nav_cerrar_sersion:
+                        Intent intentSesion = new Intent();
+                        intentSesion.setClass(MainActivity.this, LoginActivity.class);
+                        startActivity(intentSesion);
                         break;
                 }
                 return true;
@@ -180,6 +197,45 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Override
+    public void onBackPressed()
+    {
+        if(getFragmentManager().getBackStackEntryCount() > 0) {
+            getFragmentManager().popBackStack();
+            Intent refrescar = new Intent(this, InicialActivity.class);
+            startActivity(refrescar);
+            finish();
+        }else
+            super.onBackPressed();
+    }
+
+    @Override
+    public void onResume(){
+        super.onResume();
+        cargaDatos();
+    }
+
+    private void cargaDatos(){
+        // Asignar datos usuario
+        textEmail.setText(prefs.getString("email", "email@gmail.com"));
+        textNick.setText(prefs.getString("nick", "Nick"));
+
+        prefsManager = PreferenceManager.getDefaultSharedPreferences(MainActivity.this);
+
+        if (!prefsManager.getString("idioma", "").isEmpty()){
+            String idioma = prefsManager.getString("idioma", "");
+
+            if (idioma.equalsIgnoreCase("ESP"))
+                localizacion = new Locale("es", "ES");
+            else if (idioma.equalsIgnoreCase("ENG"))
+                localizacion = new Locale("en", "US");
+
+            Locale.setDefault(localizacion);
+            Configuration config = new Configuration();
+            config.locale = localizacion;
+            getBaseContext().getResources().updateConfiguration(config, getBaseContext().getResources().getDisplayMetrics());
+        }
+    }
+    /*@Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_main, menu);
         return true;
@@ -202,9 +258,9 @@ public class MainActivity extends AppCompatActivity {
                 break;
         }
         return true;
-    }
+    }*/
 
-    //@Override
+    /*//@Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         Fragment f = new GasolinerasFragment();
         Bundle args = new Bundle();
@@ -222,7 +278,7 @@ public class MainActivity extends AppCompatActivity {
         getSupportFragmentManager().beginTransaction().replace(R.id.contenedor, f).commit();
 
         return true;
-    }
+    }*/
 
     public void guardar() {
 
@@ -230,59 +286,6 @@ public class MainActivity extends AppCompatActivity {
         File direc = new File(getFilesDir(),"preciosEESS_es.xls");
 
         downloadFile(url, direc);
-
-        /*usuario = new Usuario("prueba@prueba.com", "pruebaA1@");
-        FavoritoDAO favoritoDAO = new FavoritoDAO(this);
-        favoritoDAO.abrir();
-        ArrayList<Gasolinera> gasolineras = gasolineraDAO.getGasolineras(usuario);
-        for (Gasolinera gasolinera : gasolineras){
-            Log.i("/////////", " GAS " + gasolinera.toString());
-        }*/
-
-        //Gasolinera gasolinera = new Gasolinera("Prov", "Munic", "CodPostal", "Direc", "Long", "Lat", "Precio95", "Precio98", "PrecioA", "PrecioP", "Rot", "Hor");
-        /*ContentValues reg = new ContentValues();
-        reg.put(GasolineraDAO.C_COLUMNA_PROVINCIA, gasolinera.getProvincia());
-        reg.put(GasolineraDAO.C_COLUMNA_MUNICIPIO, gasolinera.getMunicipio());
-        reg.put(GasolineraDAO.C_COLUMNA_CODPOSTAL, gasolinera.getCodPostal());
-        reg.put(GasolineraDAO.C_COLUMNA_DIRECCION, gasolinera.getDireccion());
-        reg.put(GasolineraDAO.C_COLUMNA_ID_LONGITUD, gasolinera.getLongitud());
-        reg.put(GasolineraDAO.C_COLUMNA_ID_LATITUD, gasolinera.getLatitud());
-        reg.put(GasolineraDAO.C_COLUMNA_PRECIOGASOLINA95, gasolinera.getPrecioGasolina95());
-        reg.put(GasolineraDAO.C_COLUMNA_PRECIOGASOLINA98, gasolinera.getPrecioGasolina98());
-        reg.put(GasolineraDAO.C_COLUMNA_PRECIOGASOLEOA, gasolinera.getPrecioGasoleoA());
-        reg.put(GasolineraDAO.C_COLUMNA_PRECIOGASOLEOPREMIUM, gasolinera.getPrecioGasoleoPremium());
-        reg.put(GasolineraDAO.C_COLUMNA_ROTULO, gasolinera.getRotulo());
-        reg.put(GasolineraDAO.C_COLUMNA_HORARIO, gasolinera.getHorario());
-        gasolineraDAO.add(reg);*/
-
-        /*FavoritoDAO favoritoDAO = new FavoritoDAO(this);
-        favoritoDAO.abrir();
-        ContentValues reg = new ContentValues();
-        reg.put(FavoritoDAO.C_COLUMNA_ID_GASOL_LONG, gasolinera.getLongitud());
-        reg.put(FavoritoDAO.C_COLUMNA_ID_GASOL_LAT, gasolinera.getLatitud());
-        reg.put(FavoritoDAO.C_COLUMNA_ID_USUARIO, usu1.getEmail());
-        Cursor cursorFavorito = favoritoDAO.getRegistro(usu1.getEmail());
-        if (cursorFavorito == null)
-            favoritoDAO.add(reg);
-
-        UsuarioDAO usuarioDAO = new UsuarioDAO(this);
-        usuarioDAO.abrir();
-        Usuario usuEnBD = (Usuario) usuarioDAO.search(usu1);
-        if (usuEnBD != null) {
-            usuEnBD.setFavoritos(gasolineraDAO.getGasolineras(usuEnBD));
-            for (Gasolinera gasolinera1 : usuEnBD.getFavoritos()) {
-                Log.i("/////////", " GAS 1 " + gasolinera1.toString());
-            }
-        }
-
-        favoritoDAO.delete(gasolinera.getLongitud(), gasolinera.getLatitud(), usuEnBD.getEmail());
-        if (usuEnBD != null) {
-            usuEnBD.setFavoritos(gasolineraDAO.getGasolineras(usuEnBD));
-            for (Gasolinera gasolinera1 : usuEnBD.getFavoritos()) {
-                Log.i("/////////", " GAS 2 " + gasolinera1.toString());
-            }
-        }*/
-
     }
 
 
@@ -419,7 +422,6 @@ public class MainActivity extends AppCompatActivity {
                         else gasolineraDAO.update(reg);
                     }
                     c.close();
-                    Log.i("///////////", " FECHA " + fecha);
                 }
             }
 

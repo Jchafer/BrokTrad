@@ -21,7 +21,7 @@
 
             <androidx.cardview.widget.CardView
                 android:id="@+id/cardView"
-                android:layout_width="394dp"
+                android:layout_width="match_parent"
                 android:layout_height="190dp"
                 app:cardBackgroundColor="@android:color/transparent"
                 app:cardCornerRadius="5dp"
@@ -43,9 +43,10 @@
                         <TextView
                             android:id="@+id/textRotulo"
                             style="@android:style/Widget.DeviceDefault.Light.TextView"
-                            android:layout_width="242dp"
+                            android:layout_width="match_parent"
                             android:layout_height="100dp"
                             android:layout_margin="10dp"
+                            android:layout_marginLeft="20dp"
                             android:padding="10dp"
                             android:text="TextView"
                             android:textColor="#011368"
@@ -54,9 +55,9 @@
 
                         <TextView
                             android:id="@+id/textDireccion"
-                            android:layout_width="242dp"
+                            android:layout_width="match_parent"
                             android:layout_height="match_parent"
-                            android:layout_marginLeft="10dp"
+                            android:layout_marginLeft="20dp"
                             android:layout_marginTop="20dp"
                             android:layout_marginRight="10dp"
                             android:gravity="center|left"
@@ -94,10 +95,10 @@
                 android:id="@+id/linearLayoutCompat"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
-                android:background="#00BCD4"
+                android:background="@drawable/fondo_azul_datos"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="1.0"
+                app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/cardView"
                 app:layout_constraintVertical_bias="0.0">
@@ -105,150 +106,222 @@
 
                 <TextView
                     android:id="@+id/textGas95"
-                    android:layout_width="97dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="20dp"
+                    android:layout_width="0dp"
+                    android:layout_height="55dp"
+                    android:layout_marginTop="8dp"
                     android:padding="10dp"
-                    android:text="Gasolina 95"
+                    android:text="@string/gasolina_95"
                     android:textAlignment="center"
+                    android:textColor="#FFFFFF"
+                    android:textStyle="bold"
+                    app:layout_constraintEnd_toStartOf="@+id/textGas98"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
                 <TextView
                     android:id="@+id/textGas98"
-                    android:layout_width="98dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="20dp"
+                    android:layout_width="0dp"
+                    android:layout_height="55dp"
+                    android:layout_marginTop="8dp"
                     android:padding="10dp"
-                    android:text="Gasolina 98"
+                    android:text="@string/gasolina_98"
                     android:textAlignment="center"
+                    android:textColor="#FFFFFF"
+                    android:textStyle="bold"
+                    app:layout_constraintEnd_toStartOf="@+id/textGasA"
                     app:layout_constraintStart_toEndOf="@+id/textGas95"
                     app:layout_constraintTop_toTopOf="parent" />
 
                 <TextView
                     android:id="@+id/textGasA"
-                    android:layout_width="97dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="20dp"
+                    android:layout_width="0dp"
+                    android:layout_height="55dp"
+                    android:layout_marginTop="8dp"
                     android:padding="10dp"
-                    android:text="Gasoleo A"
+                    android:text="@string/gasoleo_a"
                     android:textAlignment="center"
+                    android:textColor="#FFFFFF"
+                    android:textStyle="bold"
+                    app:layout_constraintEnd_toStartOf="@+id/textGasP"
                     app:layout_constraintStart_toEndOf="@+id/textGas98"
                     app:layout_constraintTop_toTopOf="parent" />
 
                 <TextView
                     android:id="@+id/textGasP"
-                    android:layout_width="98dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="20dp"
+                    android:layout_width="0dp"
+                    android:layout_height="55dp"
+                    android:layout_marginTop="8dp"
                     android:padding="10dp"
-                    android:text="Gasoleo P"
+                    android:text="@string/gasoleo_p"
                     android:textAlignment="center"
+                    android:textColor="#FFFFFF"
+                    android:textStyle="bold"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toEndOf="@+id/textGasA"
                     app:layout_constraintTop_toTopOf="parent" />
 
+                <View
+                    android:id="@+id/divider2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="5dp"
+                    android:background="?android:attr/listDivider"
+                    app:layout_constraintBottom_toTopOf="@+id/textProvincia"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.0"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/textPreGas98" />
+
+                <View
+                    android:id="@+id/divider4"
+                    android:layout_width="5dp"
+                    android:layout_height="0dp"
+                    android:background="?android:attr/listDivider"
+                    app:layout_constraintBottom_toTopOf="@+id/divider3"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/divider2"
+                    app:layout_constraintVertical_bias="0.586" />
+
+                <View
+                    android:id="@+id/divider3"
+                    android:layout_width="wrap_content"
+                    android:layout_height="5dp"
+                    android:background="?android:attr/listDivider"
+                    app:layout_constraintBottom_toTopOf="@+id/buttonFavorito"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="1.0"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/textCodPostal"
+                    app:layout_constraintVertical_bias="0.522" />
+
                 <TextView
                     android:id="@+id/textPreGas95"
-                    android:layout_width="97dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="20dp"
+                    android:layout_width="0dp"
+                    android:layout_height="55dp"
+                    android:layout_marginBottom="20dp"
                     android:padding="10dp"
                     android:text="TextView"
                     android:textAlignment="center"
-                    android:textSize="18sp"
+                    android:textSize="24sp"
                     android:textStyle="bold"
+                    app:layout_constraintBottom_toTopOf="@+id/divider2"
+                    app:layout_constraintEnd_toStartOf="@+id/textPreGas98"
+                    app:layout_constraintHorizontal_bias="0.5"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/textGas95" />
 
                 <TextView
                     android:id="@+id/textPreGas98"
-                    android:layout_width="98dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="20dp"
+                    android:layout_width="0dp"
+                    android:layout_height="55dp"
+                    android:layout_marginBottom="20dp"
                     android:padding="10dp"
                     android:text="TextView"
                     android:textAlignment="center"
-                    android:textSize="18sp"
+                    android:textSize="24sp"
                     android:textStyle="bold"
+                    app:layout_constraintBottom_toTopOf="@+id/divider2"
+                    app:layout_constraintEnd_toStartOf="@+id/textPreGasA"
+                    app:layout_constraintHorizontal_bias="0.5"
                     app:layout_constraintStart_toEndOf="@+id/textPreGas95"
                     app:layout_constraintTop_toBottomOf="@+id/textGas98" />
 
                 <TextView
                     android:id="@+id/textPreGasA"
-                    android:layout_width="97dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="20dp"
+                    android:layout_width="0dp"
+                    android:layout_height="55dp"
+                    android:layout_marginBottom="20dp"
                     android:padding="10dp"
                     android:text="TextView"
                     android:textAlignment="center"
-                    android:textSize="18sp"
+                    android:textSize="24sp"
                     android:textStyle="bold"
+                    app:layout_constraintBottom_toTopOf="@+id/divider2"
+                    app:layout_constraintEnd_toStartOf="@+id/textPreGasP"
+                    app:layout_constraintHorizontal_bias="0.5"
                     app:layout_constraintStart_toEndOf="@+id/textPreGas98"
                     app:layout_constraintTop_toBottomOf="@+id/textGasA" />
 
                 <TextView
                     android:id="@+id/textPreGasP"
-                    android:layout_width="98dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="20dp"
+                    android:layout_width="0dp"
+                    android:layout_height="55dp"
+                    android:layout_marginBottom="20dp"
                     android:padding="10dp"
                     android:text="TextView"
                     android:textAlignment="center"
-                    android:textSize="18sp"
+                    android:textSize="24sp"
                     android:textStyle="bold"
+                    app:layout_constraintBottom_toTopOf="@+id/divider2"
                     app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.5"
                     app:layout_constraintStart_toEndOf="@+id/textPreGasA"
                     app:layout_constraintTop_toBottomOf="@+id/textGasP" />
 
                 <TextView
                     android:id="@+id/textProvincia"
                     android:layout_width="130dp"
-                    android:layout_height="wrap_content"
+                    android:layout_height="39dp"
                     android:layout_marginTop="20dp"
+                    android:layout_marginBottom="8dp"
                     android:padding="10dp"
-                    android:text="Provincia"
+                    android:text="@string/provincia"
                     android:textAlignment="center"
+                    android:textSize="18sp"
+                    android:textStyle="bold|italic"
+                    app:layout_constraintBottom_toTopOf="@+id/textMunicipio"
+                    app:layout_constraintEnd_toStartOf="@+id/divider4"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/textPreGas95" />
+                    app:layout_constraintTop_toBottomOf="@+id/divider2" />
 
                 <TextView
                     android:id="@+id/textMunicipio"
                     android:layout_width="130dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="20dp"
+                    android:layout_height="39dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginBottom="8dp"
                     android:padding="10dp"
-                    android:text="Municipio"
+                    android:text="@string/municipio"
                     android:textAlignment="center"
-                    app:layout_constraintStart_toEndOf="@+id/textProvincia"
-                    app:layout_constraintTop_toBottomOf="@+id/textPreGas98" />
+                    android:textColor="#00BCD4"
+                    android:textSize="18sp"
+                    android:textStyle="bold|italic"
+                    app:layout_constraintBottom_toTopOf="@+id/textCodPostal"
+                    app:layout_constraintEnd_toStartOf="@+id/divider4"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/textProvincia" />
 
                 <TextView
                     android:id="@+id/textCodPostal"
                     android:layout_width="131dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="20dp"
+                    android:layout_height="39dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginBottom="16dp"
                     android:padding="10dp"
-                    android:text="Código Postal"
+                    android:text="@string/codigo_postal"
                     android:textAlignment="center"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toEndOf="@+id/textMunicipio"
-                    app:layout_constraintTop_toBottomOf="@+id/textPreGasA" />
+                    android:textColor="#00BCD4"
+                    android:textSize="18sp"
+                    android:textStyle="bold|italic"
+                    app:layout_constraintBottom_toTopOf="@+id/divider3"
+                    app:layout_constraintEnd_toStartOf="@+id/divider4"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/textMunicipio" />
 
                 <TextView
                     android:id="@+id/textHorario"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="20dp"
-                    android:layout_marginTop="20dp"
-                    android:padding="10dp"
-                    android:text="Horario"
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:layout_margin="5dp"
+                    android:text="@string/horario"
                     android:textAlignment="center"
-                    android:textSize="18sp"
+                    android:textSize="20sp"
+                    android:textStyle="bold|italic"
+                    app:layout_constraintBottom_toTopOf="@+id/divider3"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintHorizontal_bias="0.5"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/textMunicipio" />
+                    app:layout_constraintStart_toEndOf="@+id/divider4"
+                    app:layout_constraintTop_toBottomOf="@+id/textView3" />
 
                 <Button
                     android:id="@+id/buttonFavorito"
@@ -256,13 +329,12 @@
                     android:layout_height="wrap_content"
                     android:layout_margin="10dp"
                     android:background="@drawable/boton"
-                    android:text="Añadir Favorito"
+                    android:text="@string/anadir_favorito"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toStartOf="@+id/buttonMapa"
                     app:layout_constraintHorizontal_bias="0.5"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/textHorario"
-                    app:layout_constraintVertical_bias="0.941" />
+                    app:layout_constraintTop_toBottomOf="@+id/divider3" />
 
                 <Button
                     android:id="@+id/buttonMapa"
@@ -270,13 +342,28 @@
                     android:layout_height="wrap_content"
                     android:layout_margin="10dp"
                     android:background="@drawable/boton"
-                    android:text="Ir a mapa"
+                    android:text="@string/ir_a_mapa"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintHorizontal_bias="0.5"
                     app:layout_constraintStart_toEndOf="@+id/buttonFavorito"
-                    app:layout_constraintTop_toBottomOf="@+id/textHorario"
-                    app:layout_constraintVertical_bias="0.941" />
+                    app:layout_constraintTop_toBottomOf="@+id/divider3" />
+
+                <TextView
+                    android:id="@+id/textView3"
+                    android:layout_width="0dp"
+                    android:layout_height="24dp"
+                    android:layout_marginTop="24dp"
+                    android:gravity="center"
+                    android:text="@string/horario"
+                    android:textColor="#FFFFFF"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    app:layout_constraintBottom_toTopOf="@+id/textHorario"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.5"
+                    app:layout_constraintStart_toEndOf="@+id/divider4"
+                    app:layout_constraintTop_toBottomOf="@+id/divider2" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
         </androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,5 +1,6 @@
 package project.broktrad.activity;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.ContentValues;
@@ -20,6 +21,12 @@ import android.widget.ImageView;
 import android.widget.RadioButton;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.ktx.Firebase;
 
 import java.util.ArrayList;
 import java.util.regex.Matcher;
@@ -54,12 +61,15 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     private MiBD miBD;
     private UsuarioDAO usuarioDAO;
 
+    private FirebaseAuth auth;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_login);
+
+        auth = FirebaseAuth.getInstance();
 
         miBDOperacional = MiBDOperacional.getInstance(this);
         miBD = MiBD.getInstance(this);
@@ -119,19 +129,18 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             Usuario usuEnBD = (Usuario) usuarioDAO.search(usuario);
             //usuario = comprobarUsuarioCorrecto(emailPasada, clavePasada);
 
-            if (usuEnBD != null) {
+            login(usuEnBD);
+
+            /*if (usuEnBD != null) {
                 Intent intent = new Intent(view.getContext(), MainActivity.class);
                 intent.putExtra("Usuario", usuEnBD);
                 saveOnPreferences(usuEnBD.getEmail(), usuEnBD.getClave(), usuEnBD.getNick());
                 startActivity(intent);
+                finish();
             } else {
                 Toast.makeText(this, "Usuario incorrecto", Toast.LENGTH_SHORT).show();
-            }
-        }else{
-            /*if (!edadPasada.isEmpty()){
-                edadPasadaInt = Integer.parseInt(edadPasada);
             }*/
-
+        }else{
             switch (comprobaciones(emailPasada, clavePasada)){
                 case 0:
                     usuario = new Usuario(emailPasada, clavePasada, nickPasado);
@@ -140,10 +149,8 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                     reg.put(usuarioDAO.C_COLUMNA_CLAVE, usuario.getClave());
                     reg.put(usuarioDAO.C_COLUMNA_NICK, usuario.getNick());
                     usuarioDAO.add(reg);
-                    Intent intent = new Intent(view.getContext(), MainActivity.class);
-                    intent.putExtra("Usuario", usuario);
-                    saveOnPreferences(usuario.getEmail(), usuario.getClave(), usuario.getNick());
-                    startActivity(intent);
+
+                    register(usuario);
                     break;
                 case 1:
                     Toast.makeText(this, "Ya existe un usuario con ese email", Toast.LENGTH_SHORT).show();
@@ -174,6 +181,44 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             }*/
         }
 
+    }
+
+    private void login(Usuario usuario) {
+        auth.signInWithEmailAndPassword(usuario.getEmail(), usuario.getClave())
+                .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+                        if (task.isSuccessful()) {
+                            // Task completed successfully
+                            Intent intent = new Intent(getApplication(), MainActivity.class);
+                            intent.putExtra("Usuario", usuario);
+                            saveOnPreferences(usuario.getEmail(), usuario.getClave(), usuario.getNick());
+                            startActivity(intent);
+                        } else {
+                            // Task failed with an exception
+                            Toast.makeText(LoginActivity.this, "Fallo inicio sesión", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                });
+    }
+
+    private void register(Usuario usuario){
+        auth.createUserWithEmailAndPassword(usuario.getEmail(), usuario.getClave())
+                .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+                        if (task.isSuccessful()) {
+                            // Task completed successfully
+                            Intent intent = new Intent(getApplication(), MainActivity.class);
+                            intent.putExtra("Usuario", usuario);
+                            saveOnPreferences(usuario.getEmail(), usuario.getClave(), usuario.getNick());
+                            startActivity(intent);
+                        } else {
+                            // Task failed with an exception
+                            Toast.makeText(LoginActivity.this, "Fallo registro", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                });
     }
 
     @Override
