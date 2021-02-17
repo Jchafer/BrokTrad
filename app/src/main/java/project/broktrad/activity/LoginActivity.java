@@ -228,12 +228,14 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             //txtEdad.setVisibility(View.VISIBLE);
             nickUsuario.setVisibility(View.VISIBLE);
             txtNick.setVisibility(View.VISIBLE);
+            inicioSesion.setText("Registrar");
         }else{
             //edad.setVisibility(View.GONE);
             //txtEdad.setVisibility(View.GONE);
             nickUsuario.setVisibility(View.GONE);
             txtNick.setVisibility(View.GONE);
             txtRequisitos.setVisibility(View.GONE);
+            inicioSesion.setText("Iniciar sesión");
         }
 
     }

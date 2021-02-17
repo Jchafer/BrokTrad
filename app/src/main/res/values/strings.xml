@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">BrokTrad</string>
-    <string name="usuario">Usuario | </string>
-    <string name="clave">Clave | </string>
+    <string name="usuario">Usuario</string>
+    <string name="clave">Clave</string>
     <string name="botonIniciar">Iniciar sesión</string>
     <string name="broktrad">BrokTrad</string>
     <string name="email">Correo</string>
@@ -10,7 +10,7 @@
     <string name="menu_inicio">Inicio</string>
     <string name="open">Open</string>
     <string name="close">Close</string>
-    <string name="nick">Nick | </string>
+    <string name="nick">Nick</string>
     <string name="menu_actualizar">Actualizar</string>
     <string name="menu_favoritas">Favoritas</string>
     <string name="menu_buscador">Buscador</string>

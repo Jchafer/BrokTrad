@@ -70,23 +70,25 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginRight="15dp"
+            android:buttonTint="@color/verde_claro"
             android:checked="true"
             android:padding="10dp"
             android:text="@string/iniciar"
+            android:textColor="@color/verde_oscuro"
             android:textSize="24sp"
-            android:textStyle="bold"
-            android:buttonTint="@color/teal_700" />
+            android:textStyle="bold" />
 
         <RadioButton
             android:id="@+id/radioButtonRegistrar"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="15dp"
+            android:buttonTint="@color/verde_claro"
             android:padding="10dp"
             android:text="@string/registrar"
+            android:textColor="@color/verde_oscuro"
             android:textSize="24sp"
-            android:textStyle="bold"
-            android:buttonTint="@color/teal_700" />
+            android:textStyle="bold" />
     </RadioGroup>
 
     <androidx.constraintlayout.widget.Guideline
@@ -100,7 +102,6 @@
         android:id="@+id/editTextUsuario"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="25dp"
         android:ems="10"
         android:gravity="center"
         android:hint="email@gmail.com"
@@ -110,9 +111,8 @@
         android:textSize="25sp"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toEndOf="@+id/txtUsuario"
-        app:layout_constraintTop_toTopOf="@+id/guideline2" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/txtUsuario" />
 
     <TextView
         android:id="@+id/txtUsuario"
@@ -123,9 +123,11 @@
         android:gravity="center"
         android:padding="5dp"
         android:text="@string/usuario"
-        android:textColor="#000000"
+        android:textColor="@color/azul_oscuro"
         android:textSize="25sp"
         android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.2"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/guideline2" />
 
@@ -134,21 +136,23 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.4" />
+        app:layout_constraintGuide_percent="0.47" />
 
     <TextView
         android:id="@+id/txtClave"
         style="@style/Widget.AppCompat.TextView.SpinnerItem"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="30dp"
+        android:layout_marginTop="25dp"
         android:layout_weight="1"
-        android:gravity="center"
+        android:gravity="left"
         android:padding="5dp"
         android:text="@string/clave"
-        android:textColor="#000000"
+        android:textColor="@color/azul_oscuro"
         android:textSize="25sp"
         android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.2"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/guideline3" />
 
@@ -156,7 +160,6 @@
         android:id="@+id/editTextClave"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="30dp"
         android:layout_weight="0"
         android:ems="10"
         android:gravity="center"
@@ -167,9 +170,8 @@
         android:textSize="25sp"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toEndOf="@+id/txtClave"
-        app:layout_constraintTop_toTopOf="@+id/guideline3" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/txtClave" />
 
     <TextView
         android:id="@+id/txtRequisitos"
@@ -189,30 +191,31 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.6" />
+        app:layout_constraintGuide_percent="0.65" />
 
     <TextView
         android:id="@+id/txtNick"
         style="@style/Widget.AppCompat.TextView.SpinnerItem"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="25dp"
         android:layout_weight="1"
         android:gravity="center"
         android:padding="5dp"
         android:text="@string/nick"
-        android:textColor="#000000"
+        android:textColor="@color/azul_oscuro"
         android:textSize="25sp"
         android:textStyle="bold"
         android:visibility="gone"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.19"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/txtRequisitos" />
+        app:layout_constraintTop_toTopOf="@+id/guideline4" />
 
     <EditText
         android:id="@+id/editTextNick"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
         android:layout_weight="0"
         android:ems="10"
         android:gravity="center"
@@ -223,9 +226,8 @@
         android:textStyle="bold"
         android:visibility="gone"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toEndOf="@id/btAceptar"
-        app:layout_constraintTop_toBottomOf="@id/txtRequisitos" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/txtNick" />
 
     <!--<TextView
         android:id="@+id/txtEdad"
@@ -279,7 +281,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.491"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editTextNick"
+        app:layout_constraintTop_toBottomOf="@+id/guideline4"
         app:layout_constraintVertical_bias="0.759" />
 
     <!--<TextView
