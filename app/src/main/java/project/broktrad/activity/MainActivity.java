@@ -2,6 +2,7 @@ package project.broktrad.activity;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
@@ -10,6 +11,7 @@ import androidx.fragment.app.Fragment;
 
 import android.content.ContentValues;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
@@ -70,6 +72,7 @@ public class MainActivity extends AppCompatActivity {
     private DrawerLayout drawerLayout;
     private TextView textEmail;
     private TextView textNick;
+    private TextView textFecha;
 
     private SharedPreferences prefs;
 
@@ -129,6 +132,7 @@ public class MainActivity extends AppCompatActivity {
         View view = navigationView.getHeaderView(0);
         textEmail = (TextView) view.findViewById(R.id.textEmailNav);
         textNick = (TextView) view.findViewById(R.id.textNickNav);
+        textFecha = (TextView) view.findViewById(R.id.textFechaNav);
         drawerLayout = (DrawerLayout)findViewById(R.id.drawer);
 
         cargaDatos();
@@ -164,11 +168,27 @@ public class MainActivity extends AppCompatActivity {
                         drawerLayout.closeDrawer(GravityCompat.START);
                         break;
                     case R.id.nav_actualizar:
-                        guardar();
-                        leer();
-                        Toast.makeText(MainActivity.this, R.string.datos_actualizados, Toast.LENGTH_SHORT).show();
-                        Toast.makeText(MainActivity.this, prefs.getString("fecha_Actualizacion", String.valueOf(R.string.no_disponible)), Toast.LENGTH_LONG).show();
-                        break;
+                        AlertDialog.Builder dialogo = new AlertDialog.Builder(MainActivity.this);
+                        dialogo.setTitle("Actualización");
+                        dialogo.setMessage("¿Quieres actualizar la base de datos? Esto conllevará un tiempo");
+                        dialogo.setCancelable(false);
+                        dialogo.setPositiveButton("Confirmar", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialogo1, int id) {
+                                guardar();
+                                leer();
+                                Toast.makeText(MainActivity.this, R.string.datos_actualizados, Toast.LENGTH_LONG).show();
+                                Toast.makeText(MainActivity.this, prefs.getString("fecha_Actualizacion", String.valueOf(R.string.no_disponible)), Toast.LENGTH_LONG).show();
+                                cargaDatos();
+                            }
+                        });
+                        dialogo.setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialogo1, int id) {
+                                Toast.makeText(MainActivity.this, "Se ha cancelado la actualización", Toast.LENGTH_SHORT).show();
+                            }
+                        });
+                        dialogo.show();
+                        drawerLayout.closeDrawer(GravityCompat.START);
+                        return true;
                     case R.id.nav_ajustes:
                         Intent intentAjustes = new Intent();
                         intentAjustes.setClass(MainActivity.this, AjustesActivity.class);
@@ -218,6 +238,7 @@ public class MainActivity extends AppCompatActivity {
         // Asignar datos usuario
         textEmail.setText(prefs.getString("email", "email@gmail.com"));
         textNick.setText(prefs.getString("nick", "Nick"));
+        textFecha.setText("Última actualización: " + prefs.getString("fecha_Actualizacion", "Fecha"));
 
         prefsManager = PreferenceManager.getDefaultSharedPreferences(MainActivity.this);
 

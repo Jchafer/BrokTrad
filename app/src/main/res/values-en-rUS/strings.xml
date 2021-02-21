@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">BrokTrad</string>
+    <string name="app_name">G-Price</string>
     <string name="usuario">User</string>
     <string name="clave">Password</string>
     <string name="botonIniciar">Log in</string>

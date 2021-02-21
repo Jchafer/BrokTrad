@@ -17,7 +17,7 @@
         android:layout_width="80dp"
         android:layout_height="80dp"
         android:paddingTop="8dp"
-        app:srcCompat="@mipmap/ic_launcher_round" />
+        app:srcCompat="@drawable/logo" />
     <TextView
         android:id="@+id/textNickNav"
         android:layout_width="wrap_content"
@@ -29,5 +29,10 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Email"/>
+    <TextView
+        android:id="@+id/textFechaNav"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Fecha"/>
 
 </androidx.appcompat.widget.LinearLayoutCompat>

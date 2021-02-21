@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">BrokTrad</string>
+    <string name="app_name">G-Price</string>
     <string name="usuario">Usuario</string>
     <string name="clave">Clave</string>
     <string name="botonIniciar">Iniciar sesión</string>
