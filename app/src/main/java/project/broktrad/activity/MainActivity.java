@@ -19,14 +19,11 @@ import android.database.Cursor;
 import android.os.Bundle;
 import android.os.StrictMode;
 import android.preference.PreferenceManager;
-import android.util.Log;
-import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationView;
 
 import org.apache.poi.hssf.usermodel.HSSFCell;
@@ -52,12 +49,10 @@ import java.util.Locale;
 
 import project.broktrad.R;
 import project.broktrad.bd.MiBD;
-import project.broktrad.bd.MiBDOperacional;
 import project.broktrad.dao.FavoritoDAO;
 import project.broktrad.dao.GasolineraDAO;
 import project.broktrad.fragment.BuscadorFragment;
 import project.broktrad.fragment.DatosFragment;
-import project.broktrad.fragment.GasolinerasFragment;
 import project.broktrad.fragment.GasolinerasFavoritasFragment;
 import project.broktrad.pojo.Gasolinera;
 import project.broktrad.pojo.Usuario;
@@ -76,14 +71,13 @@ public class MainActivity extends AppCompatActivity {
 
     private SharedPreferences prefs;
 
-    private BottomNavigationView bottomNavigationView;
+    //private BottomNavigationView bottomNavigationView;
     private Fragment frgBuscador;
     private Fragment datosFragment;
 
     private GasolineraDAO gasolineraDAO;
     private FavoritoDAO favoritoDAO;
     private Cursor cursor;
-    private MiBDOperacional miBDOperacional;
     private MiBD miBD;
 
     SharedPreferences prefsManager;
@@ -94,7 +88,6 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        miBDOperacional = MiBDOperacional.getInstance(this);
         miBD = MiBD.getInstance(this);
         gasolineraDAO = new GasolineraDAO(this);
         favoritoDAO = new FavoritoDAO(this);
@@ -124,6 +117,7 @@ public class MainActivity extends AppCompatActivity {
         // Creación de las acciones de prueba
         gasolinerasTodas = gasolineraDAO.getGasolinerasTodas();
 
+        // Creación y gestión del navigationView
         Toolbar toolbar = (Toolbar)findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
@@ -234,6 +228,7 @@ public class MainActivity extends AppCompatActivity {
         cargaDatos();
     }
 
+    // Carga datos en el navigationView y cambia las preferencias del usuario
     private void cargaDatos(){
         // Asignar datos usuario
         textEmail.setText(prefs.getString("email", "email@gmail.com"));
@@ -256,51 +251,8 @@ public class MainActivity extends AppCompatActivity {
             getBaseContext().getResources().updateConfiguration(config, getBaseContext().getResources().getDisplayMetrics());
         }
     }
-    /*@Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_main, menu);
-        return true;
-    }
 
-    @Override
-    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        Intent intent = new Intent();
-        switch (item.getItemId()){
-            case R.id.action_cuenta:
-                intent.setClass(MainActivity.this, CuentaActivity.class);
-                intent.putExtra("Usuario", usuario);
-                startActivity(intent);
-                break;
-
-            case R.id.action_ajustes:
-                intent.setClass(MainActivity.this, AjustesActivity.class);
-                intent.putExtra("Usuario", usuario);
-                startActivity(intent);
-                break;
-        }
-        return true;
-    }*/
-
-    /*//@Override
-    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-        Fragment f = new GasolinerasFragment();
-        Bundle args = new Bundle();
-
-        switch (item.getItemId()){
-            case R.id.navigation_todos:
-                args.putSerializable("Gasolineras", gasolinerasTodas);
-                break;
-            case R.id.navigation_favoritos:
-                args.putSerializable("GasolinerasFavoritas", gasolinerasFavoritas);
-                break;
-        }
-
-        f.setArguments(args);
-        getSupportFragmentManager().beginTransaction().replace(R.id.contenedor, f).commit();
-
-        return true;
-    }*/
-
+    // A través de la url se descarga el fichero
     public void guardar() {
 
         String url = "https://geoportalgasolineras.es/resources/files/preciosEESS_es.xls";
@@ -308,8 +260,6 @@ public class MainActivity extends AppCompatActivity {
 
         downloadFile(url, direc);
     }
-
-
 
     private static void downloadFile(String url, File outputFile) {
         try {
@@ -340,6 +290,7 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    // Una vez descargado el fichero, obtenemos los datos para almacenarlos en la BBDD
     public void leer() {
         ContentValues reg = new ContentValues();
 
@@ -347,7 +298,7 @@ public class MainActivity extends AppCompatActivity {
             InputStream myInput;
             // Inicializar asset manager
             // AssetManager assetManager = getAssets();
-            //  abrir archivo excel file name as myexcelfile.xls
+            // abrir archivo excel file name as myexcelfile.xls
             //myInput = assetManager.open("preciosEESS_es.xls");
             myInput = getBaseContext().openFileInput("preciosEESS_es.xls");
             // Crear un File System object POI

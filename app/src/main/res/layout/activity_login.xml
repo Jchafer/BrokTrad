@@ -164,7 +164,7 @@
         android:ems="10"
         android:gravity="center"
         android:hint="******"
-        android:inputType="textPersonName|textCapCharacters"
+        android:inputType="textPassword"
         android:padding="5dp"
         android:textColor="#000939"
         android:textSize="25sp"
@@ -179,11 +179,10 @@
         android:layout_height="wrap_content"
         android:text="@string/Requisitos"
         android:textColor="#FF0000"
-        android:textSize="12sp"
+        android:textSize="13sp"
+        android:textStyle="bold"
         android:visibility="gone"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.085"
-        app:layout_constraintStart_toStartOf="@+id/editTextClave"
+        app:layout_constraintEnd_toEndOf="@+id/editTextClave"
         app:layout_constraintTop_toBottomOf="@+id/editTextClave" />
 
     <androidx.constraintlayout.widget.Guideline

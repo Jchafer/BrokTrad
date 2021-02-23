@@ -147,19 +147,6 @@ public class AjustesActivity extends android.preference.PreferenceActivity {
                 usuarioDAO.update(reg);
             }
 
-            /*if(key.equals("reproducirMusica")){
-                mediaPlayer = MediaPlayer.create(context.getActivity(), R.raw.sound_relax);
-                if (sharedPreferences.getBoolean(key,false) == true){
-                    mediaPlayer.start();
-                    Log.i("Start", "");
-                }else {
-                    mediaPlayer.stop();
-                    Log.i("Stop", "");
-                }
-            }*/
-
-
-
         }
 
     }

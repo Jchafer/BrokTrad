@@ -98,8 +98,6 @@ public class BuscadorFragment extends Fragment {
                             .addToBackStack(null).commit();
                 }
 
-
-
             }
         });
 

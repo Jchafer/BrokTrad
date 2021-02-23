@@ -8,7 +8,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
 import android.view.animation.Animation;
@@ -16,7 +15,6 @@ import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.EditText;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.RadioButton;
 import android.widget.TextView;
@@ -26,15 +24,12 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.ktx.Firebase;
 
-import java.util.ArrayList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import project.broktrad.R;
 import project.broktrad.bd.MiBD;
-import project.broktrad.bd.MiBDOperacional;
 import project.broktrad.dao.UsuarioDAO;
 import project.broktrad.pojo.Usuario;
 
@@ -47,17 +42,14 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     //private TextView txtEdad;
     private TextView txtRequisitos;
     private TextView txtNick;
-    private TextView txtAceptar;
     private Button inicioSesion;
     // private RadioButton entrar;
     private RadioButton registrar;
 
-    private ArrayList<Usuario> usuarios;
     private Usuario usuario;
 
     private SharedPreferences prefs;
 
-    private MiBDOperacional miBDOperacional;
     private MiBD miBD;
     private UsuarioDAO usuarioDAO;
 
@@ -71,7 +63,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
         auth = FirebaseAuth.getInstance();
 
-        miBDOperacional = MiBDOperacional.getInstance(this);
         miBD = MiBD.getInstance(this);
         usuarioDAO = new UsuarioDAO(this);
         usuarioDAO.abrir();
@@ -94,7 +85,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         //txtEdad = findViewById(R.id.txtEdad);
         txtRequisitos = findViewById(R.id.txtRequisitos);
         inicioSesion = findViewById(R.id.btAceptar);
-        // entrar = findViewById(R.id.radioButtonEntrar);
         registrar = findViewById(R.id.radioButtonRegistrar);
 
         registrar.setOnCheckedChangeListener(this);
@@ -107,10 +97,9 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
     }
 
-    private void saveOnPreferences(String email, String password, String nick) {
+    private void saveOnPreferences(String email, String nick) {
         SharedPreferences.Editor editor = prefs.edit();
         editor.putString("email", email);
-        editor.putString("password", password);
         editor.putString("nick", nick);
         editor.apply();
     }
@@ -126,11 +115,17 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
         if (!registrar.isChecked()){
             usuario = new Usuario(emailPasada, clavePasada);
+
+            // Login solo en Firebase
+            //login(usuario);
+
+            // Login en Firebase y en BBDD de la aplicación
             Usuario usuEnBD = (Usuario) usuarioDAO.search(usuario);
             //usuario = comprobarUsuarioCorrecto(emailPasada, clavePasada);
-
-            login(usuEnBD);
-
+            if (usuEnBD != null)
+                login(usuEnBD);
+            else
+                Toast.makeText(this, "Usuario incorrecto", Toast.LENGTH_SHORT).show();
             /*if (usuEnBD != null) {
                 Intent intent = new Intent(view.getContext(), MainActivity.class);
                 intent.putExtra("Usuario", usuEnBD);
@@ -183,42 +178,44 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
     }
 
+    // Inicio de sesión de usuario a traves de Firebase
     private void login(Usuario usuario) {
         auth.signInWithEmailAndPassword(usuario.getEmail(), usuario.getClave())
-                .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        if (task.isSuccessful()) {
-                            // Task completed successfully
-                            Intent intent = new Intent(getApplication(), MainActivity.class);
-                            intent.putExtra("Usuario", usuario);
-                            saveOnPreferences(usuario.getEmail(), usuario.getClave(), usuario.getNick());
-                            startActivity(intent);
-                        } else {
-                            // Task failed with an exception
-                            Toast.makeText(LoginActivity.this, "Fallo inicio sesión", Toast.LENGTH_SHORT).show();
-                        }
+            .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                @Override
+                public void onComplete(@NonNull Task<AuthResult> task) {
+                    if (task.isSuccessful()) {
+                        // Task completed successfully
+                        Intent intent = new Intent(getApplication(), MainActivity.class);
+                        intent.putExtra("Usuario", usuario);
+                        saveOnPreferences(usuario.getEmail(), usuario.getNick());
+                        startActivity(intent);
+                    } else {
+                        // Task failed with an exception
+                        Toast.makeText(LoginActivity.this, "Usuario incorrecto", Toast.LENGTH_SHORT).show();
                     }
-                });
+                }
+            });
     }
 
+    // Nuevo registro de usuario a traves de Firebase
     private void register(Usuario usuario){
         auth.createUserWithEmailAndPassword(usuario.getEmail(), usuario.getClave())
-                .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        if (task.isSuccessful()) {
-                            // Task completed successfully
-                            Intent intent = new Intent(getApplication(), MainActivity.class);
-                            intent.putExtra("Usuario", usuario);
-                            saveOnPreferences(usuario.getEmail(), usuario.getClave(), usuario.getNick());
-                            startActivity(intent);
-                        } else {
-                            // Task failed with an exception
-                            Toast.makeText(LoginActivity.this, "Fallo registro", Toast.LENGTH_SHORT).show();
-                        }
+            .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                @Override
+                public void onComplete(@NonNull Task<AuthResult> task) {
+                    if (task.isSuccessful()) {
+                        // Task completed successfully
+                        Intent intent = new Intent(getApplication(), MainActivity.class);
+                        intent.putExtra("Usuario", usuario);
+                        saveOnPreferences(usuario.getEmail(), usuario.getNick());
+                        startActivity(intent);
+                    } else {
+                        // Task failed with an exception
+                        Toast.makeText(LoginActivity.this, "Fallo registro", Toast.LENGTH_SHORT).show();
                     }
-                });
+                }
+            });
     }
 
     @Override
@@ -283,6 +280,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         return edad >= 18;
     }*/
 
+    // Valida email pasado como String mediante un pattern
     public boolean validaEmail(String email){
         // Patrón para validar el email
         Pattern pattern = Pattern.compile("([a-z0-9]+(\\.?[a-z0-9])*)+@(([a-z]+)\\.([a-z]+))+");
@@ -296,6 +294,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
     }
 
+    // Valida clave pasada como String mediante un pattern
     public boolean validaClave(String clave){
         /* Patrón para validar la clave
         Mínimo 1 número
