@@ -149,16 +149,16 @@ public class DatosFragment extends Fragment {
         email = prefs.getString("email", "email@gmail.com");
         cursor = favDao.getRegistroUnico(gasolinera.getLongitud(), gasolinera.getLatitud(), email);
         if (cursor.getCount() != 0)
-            btnFavorito.setText("ELIMINAR FAVORITO");
+            btnFavorito.setText(R.string.eliminar_favorito);
         else
-            btnFavorito.setText("AÑADIR FAVORITO");
+            btnFavorito.setText(R.string.anadir_favorito);
 
         btnFavorito.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (btnFavorito.getText().equals("ELIMINAR FAVORITO")) {
+                if (btnFavorito.getText().equals("ELIMINAR FAVORITO") || btnFavorito.getText().equals("REMOVE FAVORITE")) {
                     favDao.delete(gasolinera.getLongitud(), gasolinera.getLatitud(), email);
-                    btnFavorito.setText("AÑADIR FAVORITO");
+                    btnFavorito.setText(R.string.anadir_favorito);
                     Toast.makeText(getContext(), "La gasolinera se ha eliminado de favoritos", Toast.LENGTH_SHORT).show();
                 }else{
                     ContentValues reg = new ContentValues();
@@ -166,7 +166,7 @@ public class DatosFragment extends Fragment {
                     reg.put(FavoritoDAO.C_COLUMNA_ID_GASOL_LAT, gasolinera.getLatitud());
                     reg.put(FavoritoDAO.C_COLUMNA_ID_USUARIO, email);
                     favDao.add(reg);
-                    btnFavorito.setText("ELIMINAR FAVORITO");
+                    btnFavorito.setText(R.string.eliminar_favorito);
                     Toast.makeText(getContext(), "Gasolinera añadida a favoritos", Toast.LENGTH_SHORT).show();
                 }
             }

@@ -44,7 +44,8 @@
     <string name="provincia">Province</string>
     <string name="codigo_postal">Postal Code</string>
     <string name="horario">Schedule</string>
-    <string name="anadir_favorito">Add favorite</string>
+    <string name="anadir_favorito">ADD FAVORITE</string>
+    <string name="eliminar_favorito">REMOVE FAVORITE</string>
     <string name="ir_a_mapa">Go to map</string>
     <string name="cerrar_sesion">Sign off</string>
 </resources>

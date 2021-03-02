@@ -49,7 +49,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         double lat = Double.parseDouble(gasolinera.getLatitud().replaceAll(",", "."));
         double lng = Double.parseDouble(gasolinera.getLongitud().replaceAll(",", "."));
 
-        // Add a marker in Sydney and move the camera
+        // Añade un marcador con la gasolinera recibida
         LatLng gasolineraMarker = new LatLng(lat, lng);
         mMap.addMarker(new MarkerOptions().position(gasolineraMarker).title("Gasolinera " +
                 gasolinera.getRotulo()).snippet(gasolinera.getMunicipio() + " " + gasolinera.getDireccion()));
