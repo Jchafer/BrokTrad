@@ -3,7 +3,6 @@
     <string name="usuario">Usuario</string>
     <string name="clave">Clave</string>
     <string name="botonIniciar">Iniciar sesión</string>
-    <string name="broktrad">BrokTrad</string>
     <string name="email">Correo</string>
     <string name="cuenta">Cuenta</string>
     <string name="Requisitos">1 Número \n1 Letra minúscula \n1 Letra mayúscula \n1 Caracter especial \n8 Caracteres mínimo \nSin espacios</string>
@@ -47,4 +46,20 @@
     <string name="eliminar_favorito">ELIMINAR FAVORITO</string>
     <string name="ir_a_mapa">Ir a mapa</string>
     <string name="cerrar_sesion">Cerrar sesión</string>
+    <string name="aceptar">Aceptar</string>
+    <string name="confirmacion">Se le ha enviado un correo electrónico de confirmación</string>
+    <string name="usuario_existe">Ya existe un usuario con ese email</string>
+    <string name="email_incorrecto">Debes introducir correctamente el correo</string>
+    <string name="clave_incorrecta">Debes introducir correctamente la clave</string>
+    <string name="usuario_incorrecto">Usuario incorrecto</string>
+    <string name="fallo_registro">Fallo registro</string>
+    <string name="email_cambiado">El correo se ha cambiado correctamente</string>
+    <string name="pass_cambiado">La contraseña se ha cambiado correctamente</string>
+    <string name="sin_favoritos">No hay gasolineras en favoritos</string>
+    <string name="ultima_actualizacion">Última actualización: </string>
+    <string name="actualizacion_cancelada">Se ha cancelado la actualización</string>
+    <string name="error_bd">Se ha producido un error al abrir la base de datos</string>
+    <string name="ultima_busqueda">Última búsqueda: </string>
+    <string name="sin_municipios">No se pudieron obtener municipios</string>
+    <string name="sin_gasolineras">No se pudieron obtener gasolineras</string>
 </resources>

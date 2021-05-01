@@ -12,12 +12,13 @@ import androidx.fragment.app.Fragment;
 import java.util.ArrayList;
 import project.broktrad.R;
 import project.broktrad.pojo.Gasolinera;
+import project.broktrad.pojo.GasolineraApi;
 
-public class AdapterGasolineras extends ArrayAdapter<Gasolinera> {
+public class AdapterGasolineras extends ArrayAdapter<GasolineraApi> {
     Activity context;
-    ArrayList<Gasolinera> datos;
+    ArrayList<GasolineraApi> datos;
 
-    public AdapterGasolineras(Fragment context, ArrayList<Gasolinera> datos) {
+    public AdapterGasolineras(Fragment context, ArrayList<GasolineraApi> datos) {
         super(context.getActivity(), R.layout.layout_gasolinera_list, datos);
         this.context = context.getActivity();
         this.datos = datos;

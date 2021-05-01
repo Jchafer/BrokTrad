@@ -19,12 +19,14 @@ import android.database.Cursor;
 import android.os.Bundle;
 import android.os.StrictMode;
 import android.preference.PreferenceManager;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.material.navigation.NavigationView;
+import com.google.firebase.auth.ktx.AuthKt;
 
 import org.apache.poi.hssf.usermodel.HSSFCell;
 import org.apache.poi.hssf.usermodel.HSSFRow;
@@ -34,6 +36,8 @@ import org.apache.poi.poifs.filesystem.POIFSFileSystem;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
 
+import java.io.BufferedInputStream;
+import java.io.BufferedReader;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.File;
@@ -41,11 +45,17 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Locale;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import project.broktrad.R;
 import project.broktrad.bd.MiBD;
@@ -55,13 +65,22 @@ import project.broktrad.fragment.BuscadorFragment;
 import project.broktrad.fragment.DatosFragment;
 import project.broktrad.fragment.GasolinerasFavoritasFragment;
 import project.broktrad.pojo.Gasolinera;
+import project.broktrad.pojo.GasolineraApi;
+import project.broktrad.pojo.GasolinerasJson;
+import project.broktrad.pojo.Municipio;
 import project.broktrad.pojo.Usuario;
+import project.broktrad.service.ApiService;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
 
 public class MainActivity extends AppCompatActivity {
 
-    private Usuario usuario;
-    private ArrayList<Gasolinera> gasolinerasTodas;
-    private ArrayList<Gasolinera> gasolinerasFavoritas;
+    //private Usuario usuario;
+    //private ArrayList<Gasolinera> gasolinerasTodas;
+    //private ArrayList<GasolineraApi> gasolinerasFavoritas;
     private NavigationView navigationView;
     private ActionBarDrawerToggle toggle;
     private DrawerLayout drawerLayout;
@@ -75,9 +94,9 @@ public class MainActivity extends AppCompatActivity {
     private Fragment frgBuscador;
     private Fragment datosFragment;
 
-    private GasolineraDAO gasolineraDAO;
+    //private GasolineraDAO gasolineraDAO;
     private FavoritoDAO favoritoDAO;
-    private Cursor cursor;
+    //private Cursor cursor;
     private MiBD miBD;
 
     SharedPreferences prefsManager;
@@ -89,33 +108,22 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         miBD = MiBD.getInstance(this);
-        gasolineraDAO = new GasolineraDAO(this);
         favoritoDAO = new FavoritoDAO(this);
 
         try {
             // Abrimos la base de datos
-            gasolineraDAO.abrir();
-            // Obtenemos el cursor
-            cursor = gasolineraDAO.getCursor();
-            // Se indica que a la Actividad principal que controle los recursos
-            // cursor. Es decir, si se termina la Actividad, se elimina este cursor de la memoria
-            startManagingCursor(cursor);
-
+            favoritoDAO.abrir();
         } catch (Exception e) {
-            Toast.makeText(getBaseContext(), "Se ha producido un error al abrir la base de datos.",
+            Toast.makeText(getBaseContext(), R.string.error_bd,
                     Toast.LENGTH_LONG).show();
             e.printStackTrace();
-
         }
 
         // Recibir usuario
-        usuario = (Usuario) getIntent().getSerializableExtra("Usuario");
+        //usuario = (Usuario) getIntent().getSerializableExtra("Usuario");
 
         // Obtenemos referencia a las preferencias del usuario
         prefs = getSharedPreferences("prefersUsuario", Context.MODE_PRIVATE);
-
-        // Creación de las acciones de prueba
-        gasolinerasTodas = gasolineraDAO.getGasolinerasTodas();
 
         // Creación y gestión del navigationView
         Toolbar toolbar = (Toolbar)findViewById(R.id.toolbar);
@@ -148,20 +156,46 @@ public class MainActivity extends AppCompatActivity {
                     case R.id.nav_buscador:
                         fragment = new BuscadorFragment();
                         getSupportFragmentManager().beginTransaction().replace(R.id.contenedor, fragment).commit();
-                        //bottomNavigationView.setVisibility(View.VISIBLE);
                         drawerLayout.closeDrawer(GravityCompat.START);
                         break;
                     case R.id.nav_favoritas:
                         fragment = new GasolinerasFavoritasFragment();
-                        ArrayList<Gasolinera> gasolinerasFavoritas = gasolineraDAO.getGasolineras(prefs.getString("email", "email@gmail.com"));
+                        ArrayList<GasolineraApi> gasolinerasFavoritas = new ArrayList();
+                        ArrayList<String> idGasolineras = favoritoDAO.gasolinerasFavoritas((String) textEmail.getText());
+                        if (!idGasolineras.isEmpty()){
+                            Retrofit retrofit = new Retrofit.Builder()
+                                    .baseUrl("https://sedeaplicaciones.minetur.gob.es/")
+                                    .addConverterFactory(GsonConverterFactory.create())
+                                    .build();
+                            ApiService apiService = retrofit.create(ApiService.class);
+                            Call<GasolinerasJson> call = apiService.getGasolinerasValencia();
+                            call.enqueue(new Callback<GasolinerasJson>() {
 
-                        args.putSerializable("GasolinerasFavoritas", gasolinerasFavoritas);
-                        fragment.setArguments(args);
-                        getSupportFragmentManager().beginTransaction().replace(R.id.contenedor, fragment).addToBackStack(null).commit();
-                        //bottomNavigationView.setVisibility(View.INVISIBLE);
+                                @Override
+                                public void onResponse(Call<GasolinerasJson> call, Response<GasolinerasJson> response) {
+                                    for (int i = 0; i < idGasolineras.size(); i++) {
+                                        for(GasolineraApi gasolineraApi : response.body().getListaGasolineras()) {
+                                            if (idGasolineras.get(i).equalsIgnoreCase(gasolineraApi.getIDGasolinera()))
+                                                gasolinerasFavoritas.add(gasolineraApi);
+                                        }
+                                    }
+
+                                    args.putSerializable("GasolinerasFavoritas", gasolinerasFavoritas);
+                                    fragment.setArguments(args);
+                                    getSupportFragmentManager().beginTransaction().replace(R.id.contenedor, fragment).addToBackStack(null).commit();
+
+                                }
+
+                                @Override
+                                public void onFailure(Call<GasolinerasJson> call, Throwable t) {
+                                }
+                            });
+                        }else{
+                            Toast.makeText(MainActivity.this, R.string.sin_favoritos, Toast.LENGTH_SHORT).show();
+                        }
                         drawerLayout.closeDrawer(GravityCompat.START);
                         break;
-                    case R.id.nav_actualizar:
+                    /*case R.id.nav_actualizar:
                         AlertDialog.Builder dialogo = new AlertDialog.Builder(MainActivity.this);
                         dialogo.setTitle("Actualización");
                         dialogo.setMessage("¿Quieres actualizar la base de datos? Esto conllevará un tiempo");
@@ -177,16 +211,16 @@ public class MainActivity extends AppCompatActivity {
                         });
                         dialogo.setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialogo1, int id) {
-                                Toast.makeText(MainActivity.this, "Se ha cancelado la actualización", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(MainActivity.this, R.string.actualizacion_cancelada, Toast.LENGTH_SHORT).show();
                             }
                         });
                         dialogo.show();
                         drawerLayout.closeDrawer(GravityCompat.START);
-                        return true;
+                        return true;*/
                     case R.id.nav_ajustes:
                         Intent intentAjustes = new Intent();
                         intentAjustes.setClass(MainActivity.this, AjustesActivity.class);
-                        intentAjustes.putExtra("Usuario", usuario);
+                        //intentAjustes.putExtra("Usuario", usuario);
                         startActivity(intentAjustes);
                         break;
                     case R.id.nav_cerrar_sersion:
@@ -203,9 +237,6 @@ public class MainActivity extends AppCompatActivity {
 
         // Creación del fragment de gasolineras
         frgBuscador = new BuscadorFragment();
-        //Bundle args = new Bundle();
-        //args.putSerializable("Gasolineras", gasolinerasTodas);
-        //frgAcciones.setArguments(args);
         getSupportFragmentManager().beginTransaction().replace(R.id.contenedor, frgBuscador).commit();
 
     }
@@ -233,7 +264,7 @@ public class MainActivity extends AppCompatActivity {
         // Asignar datos usuario
         textEmail.setText(prefs.getString("email", "email@gmail.com"));
         textNick.setText(prefs.getString("nick", "Nick"));
-        textFecha.setText("Última actualización: " + prefs.getString("fecha_Actualizacion", "Fecha"));
+        textFecha.setText(getResources().getString(R.string.ultima_busqueda) + " " + prefs.getString("fecha_Actualizacion", "Fecha"));
 
         prefsManager = PreferenceManager.getDefaultSharedPreferences(MainActivity.this);
 
@@ -385,15 +416,15 @@ public class MainActivity extends AppCompatActivity {
                         }
                     }
                     countColumn = 0;
-                    Cursor c = gasolineraDAO.getRegistro(reg.getAsString(GasolineraDAO.C_COLUMNA_ID_LONGITUD), reg.getAsString(GasolineraDAO.C_COLUMNA_ID_LATITUD));
+                    //Cursor c = gasolineraDAO.getRegistro(reg.getAsString(GasolineraDAO.C_COLUMNA_ID_LONGITUD), reg.getAsString(GasolineraDAO.C_COLUMNA_ID_LATITUD));
 
                     // Si getCount() devuelve 0, no hay registro con esos ids
                     // Si getCount() devuelve 1, hay un registro con esos ids
                     if (reg.getAsString(GasolineraDAO.C_COLUMNA_PROVINCIA).contains("VALENCIA")){
-                        if (c.getCount() == 0) gasolineraDAO.add(reg);
-                        else gasolineraDAO.update(reg);
+                        //if (c.getCount() == 0) gasolineraDAO.add(reg);
+                        //else gasolineraDAO.update(reg);
                     }
-                    c.close();
+                    //c.close();
                 }
             }
 
@@ -407,4 +438,5 @@ public class MainActivity extends AppCompatActivity {
         return conPunto;
 
     }
+
 }

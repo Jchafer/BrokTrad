@@ -1,7 +1,9 @@
 package project.broktrad.activity;
 
 import androidx.activity.OnBackPressedCallback;
+import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import project.broktrad.R;
 import project.broktrad.dao.UsuarioDAO;
@@ -11,6 +13,7 @@ import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.content.ContentValues;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
@@ -20,9 +23,18 @@ import android.os.Bundle;
 import android.preference.Preference;
 import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
+import android.util.Log;
 import android.view.MenuItem;
+import android.widget.Toast;
+
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 import java.util.Locale;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class AjustesActivity extends android.preference.PreferenceActivity {
 
@@ -38,8 +50,10 @@ public class AjustesActivity extends android.preference.PreferenceActivity {
         ft.replace(android.R.id.content, new PreferenciasFragment());
         ft.addToBackStack(null).commit();
 
+        // Obtenemos referencia a las preferencias
         prefsManager = PreferenceManager.getDefaultSharedPreferences(AjustesActivity.this);
 
+        // Cambiamos idioma según esté en preferencias
         if (!prefsManager.getString("idioma", "").isEmpty()){
             String idioma = prefsManager.getString("idioma", "");
 
@@ -56,6 +70,7 @@ public class AjustesActivity extends android.preference.PreferenceActivity {
 
     }
 
+    // Cargar de nuevo la activity, para así aplicar los cambios de ajustes
     @Override
     public void onBackPressed()
     {
@@ -82,9 +97,7 @@ public class AjustesActivity extends android.preference.PreferenceActivity {
 
         Locale localizacion;
         Configuration config;
-        MediaPlayer mediaPlayer;
-        PreferenciasFragment context = this;
-        private UsuarioDAO usuarioDAO;
+        //private UsuarioDAO usuarioDAO;
 
         @Override
         public void onCreate(final Bundle savedInstanceState) {
@@ -126,6 +139,8 @@ public class AjustesActivity extends android.preference.PreferenceActivity {
                 config = new Configuration();
                 config.locale = localizacion;
                 getResources().updateConfiguration(config, null);
+
+                // Para aplicar los cambios al momento
                 getActivity().recreate();
             }
 
@@ -135,7 +150,8 @@ public class AjustesActivity extends android.preference.PreferenceActivity {
                 editor.putString("nick", sharedPreferences.getString(key, ""));
                 editor.apply();
 
-                Usuario usuario = new Usuario(prefs.getString("email", "email@gmail.com"));
+                // Obtenemos los datos del usuario, para actualizar su campo nick
+                /*Usuario usuario = new Usuario(prefs.getString("email", "email@gmail.com"));
                 usuarioDAO = new UsuarioDAO(getActivity());
                 usuarioDAO.abrir();
                 Usuario usuariosBD = (Usuario) usuarioDAO.search(usuario);
@@ -144,11 +160,131 @@ public class AjustesActivity extends android.preference.PreferenceActivity {
                 reg.put(usuarioDAO.C_COLUMNA_ID_EMAIL, usuariosBD.getEmail());
                 reg.put(usuarioDAO.C_COLUMNA_CLAVE, usuariosBD.getClave());
                 reg.put(usuarioDAO.C_COLUMNA_NICK, sharedPreferences.getString(key, ""));
-                usuarioDAO.update(reg);
+                usuarioDAO.update(reg);*/
+            }
+
+            if(key.equals("email")){
+                if (validaEmail(sharedPreferences.getString(key, ""))){
+                    FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+                    user.updateEmail(sharedPreferences.getString(key, ""))
+                            .addOnCompleteListener(new OnCompleteListener<Void>() {
+                                @Override
+                                public void onComplete(@NonNull Task<Void> task) {
+                                    if (task.isSuccessful()) {
+                                        Log.d("UPDATE", "User email address updated.");
+                                        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+                                        builder.setTitle(R.string.cambiar_correo);
+                                        builder.setMessage(R.string.email_cambiado);
+                                        builder.setPositiveButton(R.string.aceptar, new DialogInterface.OnClickListener() {
+                                            @Override
+                                            public void onClick(DialogInterface dialog, int which) {
+                                                Log.d("Correct", "Email changed.");
+                                            }
+                                        });
+                                        builder.show();
+
+                                    }
+                                }
+                            });
+                }else{
+                    AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+                    builder.setTitle(R.string.cambiar_correo);
+                    builder.setMessage(R.string.email_incorrecto);
+                    builder.setPositiveButton(R.string.aceptar, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            Log.d("Incorrect", "Email wrong.");
+                        }
+                    });
+                    builder.show();
+                }
+
+            }
+
+            if(key.equals("password")){
+                if (validaClave(sharedPreferences.getString(key, ""))){
+                    FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+                    user.updatePassword(sharedPreferences.getString(key, ""))
+                            .addOnCompleteListener(new OnCompleteListener<Void>() {
+                                @Override
+                                public void onComplete(@NonNull Task<Void> task) {
+                                    if (task.isSuccessful()) {
+                                        Log.d("UPDATE", "User password updated.");
+                                        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+                                        builder.setTitle(R.string.cambiar_pass);
+                                        builder.setMessage(R.string.pass_cambiado);
+                                        builder.setPositiveButton(R.string.aceptar, new DialogInterface.OnClickListener() {
+                                            @Override
+                                            public void onClick(DialogInterface dialog, int which) {
+                                                Log.d("Correct", "Password changed.");
+                                            }
+                                        });
+                                        builder.show();
+
+                                    }
+                                }
+                            });
+                }else{
+                    AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+                    builder.setTitle(R.string.cambiar_pass);
+                    builder.setMessage(R.string.clave_incorrecta);
+                    builder.setPositiveButton(R.string.aceptar, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            Log.d("Incorrect", "Password wrong.");
+                        }
+                    });
+                    builder.show();
+                }
             }
 
         }
 
+        // Valida email pasado como String mediante un pattern
+        public boolean validaEmail(String email){
+            // Patrón para validar el email
+            Pattern pattern = Pattern.compile("([a-z0-9]+(\\.?[a-z0-9])*)+@(([a-z]+)\\.([a-z]+))+");
+
+            Matcher mather = pattern.matcher(email);
+
+            if (mather.find() == true)
+                return true;
+
+            return false;
+
+        }
+
+        // Valida clave pasada como String mediante un pattern
+        public boolean validaClave(String clave){
+        /* Patrón para validar la clave
+        Mínimo 1 número
+        Mínimo 1 letra minúscula
+        Mínimo 1 letra mayùscula
+        Mínimo 1 caracter especial
+        Sin espacios
+        Mínimo 8 caracteres*/
+            Pattern pattern = Pattern.compile("^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=])(?=\\S+$).{8,}$");
+
+            Matcher mather = pattern.matcher(clave);
+
+            if (mather.find() == true)
+                return true;
+
+            return false;
+        }
+
+        public void createSimpleDialog(String titulo, String mensaje) {
+            AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+            builder.setTitle(titulo);
+            builder.setMessage(mensaje);
+            builder.setPositiveButton(R.string.aceptar, new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    Log.d("Correct", "Email sent.");
+                }
+            });
+            builder.show();
+        }
     }
 
 }

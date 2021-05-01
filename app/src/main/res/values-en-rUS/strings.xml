@@ -4,7 +4,6 @@
     <string name="usuario">User</string>
     <string name="clave">Password</string>
     <string name="botonIniciar">Log in</string>
-    <string name="broktrad">BrokTrad</string>
     <string name="email">Email</string>
     <string name="cuenta">Account</string>
     <string name="Requisitos">1 Number \n1 Lowercase letter \n1 Capital letter \n1 Special character \n8 Minimum characters \nNo spaces</string>
@@ -48,4 +47,20 @@
     <string name="eliminar_favorito">REMOVE FAVORITE</string>
     <string name="ir_a_mapa">Go to map</string>
     <string name="cerrar_sesion">Sign off</string>
+    <string name="aceptar">Accept</string>
+    <string name="confirmacion">A confirmation email has been sent to you</string>
+    <string name="usuario_existe">There is already a user with that email</string>
+    <string name="email_incorrecto">You must enter the email correctly</string>
+    <string name="clave_incorrecta">You must enter the password correctly</string>
+    <string name="usuario_incorrecto">Wrong user</string>
+    <string name="fallo_registro">Registration failed</string>
+    <string name="email_cambiado">The mail has been changed successfully</string>
+    <string name="pass_cambiado">The password has been changed successfully</string>
+    <string name="sin_favoritos">No gas stations in favorites</string>
+    <string name="ultima_actualizacion">Last update: </string>
+    <string name="actualizacion_cancelada">The update has been canceled</string>
+    <string name="error_bd">An error occurred while opening the database</string>
+    <string name="ultima_busqueda">Last search: </string>
+    <string name="sin_municipios">Cities could not be obtained</string>
+    <string name="sin_gasolineras">Could not get gas stations</string>
 </resources>

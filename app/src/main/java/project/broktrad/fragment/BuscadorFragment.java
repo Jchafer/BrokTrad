@@ -1,75 +1,45 @@
 package project.broktrad.fragment;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
 
-import android.text.Editable;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import project.broktrad.R;
-import project.broktrad.adapter.AdapterGasolineras;
-import project.broktrad.dao.GasolineraDAO;
-import project.broktrad.pojo.Gasolinera;
+import project.broktrad.pojo.GasolineraApi;
+import project.broktrad.pojo.GasolinerasJson;
+import project.broktrad.pojo.Municipio;
+import project.broktrad.service.ApiService;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link BuscadorFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
 public class BuscadorFragment extends Fragment {
 
+    private SharedPreferences prefs;
     private EditText municipio;
     private Button buscar;
-
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
-
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
+    private ArrayList<Municipio> municipios = new ArrayList<>();
+    private Municipio municipioSeleccionado = null;
+    private ArrayList<GasolineraApi> gasolinerasSeleccionadas = new ArrayList<>();
 
     public BuscadorFragment() {
         // Required empty public constructor
-    }
-
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment GasolFragment.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static BuscadorFragment newInstance(String param1, String param2) {
-        BuscadorFragment fragment = new BuscadorFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
-    }
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
     }
 
     @Override
@@ -77,31 +47,94 @@ public class BuscadorFragment extends Fragment {
                              Bundle savedInstanceState) {
         View myInflatedView = inflater.inflate(R.layout.fragment_buscador, container, false);
 
+        prefs = this.getActivity().getSharedPreferences("prefersUsuario", Context.MODE_PRIVATE);
+
+        // Obtenemos la lista de municipios
+        getMunicipios();
+
         municipio = (EditText) myInflatedView.findViewById(R.id.editText_municipio);
+        municipio.setText("Albal");
+
         buscar = (Button) myInflatedView.findViewById(R.id.button_buscar);
         buscar.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v)
-            {
+            public void onClick(View v){
                 String municipioIntroducido = municipio.getText().toString();
-                GasolineraDAO gas = new GasolineraDAO(getActivity());
-                gas.abrir();
+                gasolinerasSeleccionadas.clear();
 
-                ArrayList<Gasolinera> gasolineras = gas.gasolinerasPorMunicipio(municipioIntroducido);
-                if (gasolineras == null)
-                    Toast.makeText(getActivity(), R.string.ningun_municipio, Toast.LENGTH_SHORT).show();
-                else{
-                    Fragment frgGasolineras = new GasolinerasFragment();
-                    Bundle args = new Bundle();
-                    args.putSerializable("Gasolineras", gasolineras);
-                    frgGasolineras.setArguments(args);
-                    getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.contenedor, frgGasolineras)
-                            .addToBackStack(null).commit();
+                // Obtenemos nombre introducido y comprobamos si existe en la lista de municipios
+                for (Municipio municipio : municipios) {
+                    if (municipio.getNombre().toUpperCase().equalsIgnoreCase(municipioIntroducido.toUpperCase())){
+                        municipioSeleccionado = municipio;
+                    }
                 }
 
+                // Si el municipio existe le pasamos su id a apiService para obtener las gasolineras
+                if (municipioSeleccionado != null)
+                    getGasolinerasMunicipio(municipioSeleccionado.getID());
+
+                else
+                    Toast.makeText(getActivity(), R.string.ningun_municipio, Toast.LENGTH_SHORT).show();
             }
         });
 
         return myInflatedView;
+    }
+
+    private void getMunicipios() {
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl("https://sedeaplicaciones.minetur.gob.es/")
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+        ApiService apiService = retrofit.create(ApiService.class);
+        Call<List<Municipio>> call = apiService.getMunicipios();
+        call.enqueue(new Callback<List<Municipio>>() {
+            @Override
+            public void onResponse(Call<List<Municipio>> call, Response<List<Municipio>> response) {
+                for(Municipio municipio : response.body()) {
+                    municipios.add(municipio);
+                }
+            }
+            @Override
+            public void onFailure(Call<List<Municipio>> call, Throwable t) {
+                Toast.makeText(getActivity(), R.string.sin_municipios, Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    private void getGasolinerasMunicipio(String idMunicipio) {
+
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl("https://sedeaplicaciones.minetur.gob.es/")
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+        ApiService apiService = retrofit.create(ApiService.class);
+        Call<GasolinerasJson> call = apiService.getGasolinerasMunicipio(idMunicipio);
+        call.enqueue(new Callback<GasolinerasJson>() {
+
+            @Override
+            public void onResponse(Call<GasolinerasJson> call, Response<GasolinerasJson> response) {
+                for(GasolineraApi gasolineraApi : response.body().getListaGasolineras()) {
+                    gasolinerasSeleccionadas.add(gasolineraApi);
+                }
+
+                SharedPreferences.Editor editor = prefs.edit();
+                Log.e("Fecha", response.body().getFecha());
+                editor.putString("fecha_Actualizacion", response.body().getFecha());
+                editor.apply();
+
+                Fragment frgGasolineras = new GasolinerasFragment();
+                Bundle args = new Bundle();
+                args.putSerializable("Gasolineras", gasolinerasSeleccionadas);
+                frgGasolineras.setArguments(args);
+                getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.contenedor, frgGasolineras)
+                        .addToBackStack(null).commit();
+
+            }
+            @Override
+            public void onFailure(Call<GasolinerasJson> call, Throwable t) {
+                Toast.makeText(getActivity(), R.string.sin_gasolineras, Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
 }

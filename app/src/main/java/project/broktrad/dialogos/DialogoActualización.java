@@ -26,7 +26,6 @@ public class DialogoActualización extends DialogFragment {
         View view = inflater.inflate(R.layout.layout_dialog_movimiento, null);
         datos = view.findViewById(R.id.tvDatos);
         datos.setText(info);
-        //Log.i("///////", "Mov: " + importe.getText());
 
         builder.setView(inflater.inflate(R.layout.layout_dialog_movimiento, null)).
                 setView(view).

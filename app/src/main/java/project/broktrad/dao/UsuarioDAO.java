@@ -102,7 +102,6 @@ public class UsuarioDAO {
 
             // Obtenemos la lista de gasolineras que tiene el cliente
             //Cursor cursorNuevo = miBD.getGasolineraDAO().obtenerFavoritos(c.getEmail());
-            //Log.i("///////", "OTRO: " + cursorNuevo.getColumnName(1));
             //nuevoUsuario.setFavoritos(miBD.getGasolineraDAO().getGasolineras(nuevoUsuario));
 
         }

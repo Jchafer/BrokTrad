@@ -1,13 +1,16 @@
 package project.broktrad.activity;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.ContentValues;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
 import android.view.animation.Animation;
@@ -38,20 +41,18 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     private EditText nombreUsuario;
     private EditText claveUsuario;
     private EditText nickUsuario;
-    //private EditText edad;
-    //private TextView txtEdad;
     private TextView txtRequisitos;
     private TextView txtNick;
     private Button inicioSesion;
     // private RadioButton entrar;
     private RadioButton registrar;
 
-    private Usuario usuario;
+    //private Usuario usuario;
 
     private SharedPreferences prefs;
 
-    private MiBD miBD;
-    private UsuarioDAO usuarioDAO;
+    //private MiBD miBD;
+    //private UsuarioDAO usuarioDAO;
 
     private FirebaseAuth auth;
 
@@ -63,9 +64,9 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
         auth = FirebaseAuth.getInstance();
 
-        miBD = MiBD.getInstance(this);
+        /*miBD = MiBD.getInstance(this);
         usuarioDAO = new UsuarioDAO(this);
-        usuarioDAO.abrir();
+        usuarioDAO.abrir();*/
 
         //Agregar animaciones
         Animation animacion1 = AnimationUtils.loadAnimation(this, R.anim.desplazamiento_izquierda);
@@ -81,8 +82,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         claveUsuario = findViewById(R.id.editTextClave);
         nickUsuario = findViewById(R.id.editTextNick);
         txtNick = findViewById(R.id.txtNick);
-        //edad = findViewById(R.id.editTextEdad);
-        //txtEdad = findViewById(R.id.txtEdad);
         txtRequisitos = findViewById(R.id.txtRequisitos);
         inicioSesion = findViewById(R.id.btAceptar);
         registrar = findViewById(R.id.radioButtonRegistrar);
@@ -90,19 +89,18 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         registrar.setOnCheckedChangeListener(this);
         inicioSesion.setOnClickListener(this);
 
+        // Datos de acceso rápido
         nombreUsuario.setText("admin@admin.com");
         claveUsuario.setText("adminA1@");
 
         prefs = getSharedPreferences("prefersUsuario", Context.MODE_PRIVATE);
-
     }
 
-    private void saveOnPreferences(String email, String nick) {
+    /*private void saveOnPreferences(String email) {
         SharedPreferences.Editor editor = prefs.edit();
         editor.putString("email", email);
-        editor.putString("nick", nick);
         editor.apply();
-    }
+    }*/
 
     @Override
     public void onClick(View view) {
@@ -110,109 +108,92 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         String emailPasada = nombreUsuario.getText().toString();
         String clavePasada = claveUsuario.getText().toString();
         String nickPasado = nickUsuario.getText().toString();
-        //String edadPasada = edad.getText().toString();
-        //int edadPasadaInt = 0;
 
         if (!registrar.isChecked()){
-            usuario = new Usuario(emailPasada, clavePasada);
-
             // Login solo en Firebase
-            //login(usuario);
+            login(emailPasada, clavePasada);
 
             // Login en Firebase y en BBDD de la aplicación
-            Usuario usuEnBD = (Usuario) usuarioDAO.search(usuario);
-            //usuario = comprobarUsuarioCorrecto(emailPasada, clavePasada);
+            /*Usuario usuEnBD = (Usuario) usuarioDAO.search(usuario);
+            usuario = comprobarUsuarioCorrecto(emailPasada, clavePasada);
             if (usuEnBD != null)
-                login(usuEnBD);
+                login(emailPasada, clavePasada, nickPasado);
             else
-                Toast.makeText(this, "Usuario incorrecto", Toast.LENGTH_SHORT).show();
-            /*if (usuEnBD != null) {
-                Intent intent = new Intent(view.getContext(), MainActivity.class);
-                intent.putExtra("Usuario", usuEnBD);
-                saveOnPreferences(usuEnBD.getEmail(), usuEnBD.getClave(), usuEnBD.getNick());
-                startActivity(intent);
-                finish();
-            } else {
-                Toast.makeText(this, "Usuario incorrecto", Toast.LENGTH_SHORT).show();
-            }*/
+                Toast.makeText(this, R.string.usuario_incorrecto, Toast.LENGTH_SHORT).show();*/
         }else{
             switch (comprobaciones(emailPasada, clavePasada)){
                 case 0:
-                    usuario = new Usuario(emailPasada, clavePasada, nickPasado);
+                    // Se añade un nuevo usuario en la BD
+                    /*usuario = new Usuario(emailPasada, clavePasada, nickPasado);
                     ContentValues reg = new ContentValues();
                     reg.put(usuarioDAO.C_COLUMNA_ID_EMAIL, usuario.getEmail());
                     reg.put(usuarioDAO.C_COLUMNA_CLAVE, usuario.getClave());
                     reg.put(usuarioDAO.C_COLUMNA_NICK, usuario.getNick());
-                    usuarioDAO.add(reg);
+                    usuarioDAO.add(reg);*/
 
-                    register(usuario);
+                    register(emailPasada, clavePasada, nickPasado);
                     break;
                 case 1:
-                    Toast.makeText(this, "Ya existe un usuario con ese email", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, R.string.usuario_existe, Toast.LENGTH_SHORT).show();
                     break;
                 case 2:
-                    //Toast.makeText(this, "Debes ser mayor de edad", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, R.string.email_incorrecto, Toast.LENGTH_SHORT).show();
                     break;
                 case 3:
-                    Toast.makeText(this, "Debes introducir correctamente el email", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, R.string.clave_incorrecta, Toast.LENGTH_SHORT).show();
                     break;
-                case 4:
-                    Toast.makeText(this, "Debes introducir correctamente la clave", Toast.LENGTH_SHORT).show();
-                    break;
-
             }
-            /*if (comprobarMayorEdad(Integer.parseInt(edad.getText().toString()))){
-                if (!comprobarUsuarioExiste(nombreUsuario.getText().toString())){
-                    usuario = new Usuario(nombreUsuario.getText().toString(), claveUsuario.getText().toString(), Integer.parseInt(edad.getText().toString()));
-                    usuarios.add(usuario);
-                    Intent intent = new Intent(view.getContext(), MainActivity.class);
-                    intent.putExtra("Usuario", usuario);
-                    startActivity(intent);
-                } else {
-                    Toast.makeText(this, "Ya existe un usuario con ese email", Toast.LENGTH_SHORT).show();
-                }
-            } else {
-                Toast.makeText(this, "Debes ser mayor de edad", Toast.LENGTH_SHORT).show();
-            }*/
         }
-
     }
 
     // Inicio de sesión de usuario a traves de Firebase
-    private void login(Usuario usuario) {
-        auth.signInWithEmailAndPassword(usuario.getEmail(), usuario.getClave())
+    private void login(String emailPasada, String clavePasada) {
+        auth.signInWithEmailAndPassword(emailPasada, clavePasada)
             .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                 @Override
                 public void onComplete(@NonNull Task<AuthResult> task) {
                     if (task.isSuccessful()) {
-                        // Task completed successfully
+                        // Se cambia el email de las preferencias del usuario
+                        SharedPreferences.Editor editor = prefs.edit();
+                        editor.putString("email", emailPasada);
+                        editor.apply();
                         Intent intent = new Intent(getApplication(), MainActivity.class);
-                        intent.putExtra("Usuario", usuario);
-                        saveOnPreferences(usuario.getEmail(), usuario.getNick());
+                        // Se obtienen los datos del usuario en la BD
+                        /*usuario = new Usuario(email);
+                        Usuario usuEnBD = (Usuario) usuarioDAO.search(usuario);
+                        intent.putExtra("Usuario", usuEnBD);*/
                         startActivity(intent);
                     } else {
                         // Task failed with an exception
-                        Toast.makeText(LoginActivity.this, "Usuario incorrecto", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(LoginActivity.this, R.string.usuario_incorrecto, Toast.LENGTH_SHORT).show();
                     }
                 }
             });
     }
 
     // Nuevo registro de usuario a traves de Firebase
-    private void register(Usuario usuario){
-        auth.createUserWithEmailAndPassword(usuario.getEmail(), usuario.getClave())
+    private void register(String emailPasada, String clavePasada, String nickPasado){
+        auth.createUserWithEmailAndPassword(emailPasada, clavePasada)
             .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                 @Override
                 public void onComplete(@NonNull Task<AuthResult> task) {
                     if (task.isSuccessful()) {
-                        // Task completed successfully
-                        Intent intent = new Intent(getApplication(), MainActivity.class);
-                        intent.putExtra("Usuario", usuario);
-                        saveOnPreferences(usuario.getEmail(), usuario.getNick());
-                        startActivity(intent);
+                        // Se cambia el nick de las preferencias del usuario
+                        SharedPreferences.Editor editor = prefs.edit();
+                        editor.putString("nick", nickPasado);
+                        editor.apply();
+                        auth.getCurrentUser().sendEmailVerification()
+                                .addOnCompleteListener(new OnCompleteListener<Void>() {
+                                    @Override
+                                    public void onComplete(@NonNull Task<Void> task) {
+                                        if (task.isSuccessful()) {
+                                            createSimpleDialog();
+                                        }
+                                    }
+                                });
                     } else {
                         // Task failed with an exception
-                        Toast.makeText(LoginActivity.this, "Fallo registro", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(LoginActivity.this, R.string.fallo_registro, Toast.LENGTH_SHORT).show();
                     }
                 }
             });
@@ -221,14 +202,10 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     @Override
     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
         if(isChecked){
-            //edad.setVisibility(View.VISIBLE);
-            //txtEdad.setVisibility(View.VISIBLE);
             nickUsuario.setVisibility(View.VISIBLE);
             txtNick.setVisibility(View.VISIBLE);
             inicioSesion.setText("Registrar");
         }else{
-            //edad.setVisibility(View.GONE);
-            //txtEdad.setVisibility(View.GONE);
             nickUsuario.setVisibility(View.GONE);
             txtNick.setVisibility(View.GONE);
             txtRequisitos.setVisibility(View.GONE);
@@ -237,47 +214,43 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
     }
 
-    /*public Usuario comprobarUsuarioCorrecto(String nombreUsuario, String claveUsuario){
-        for (Usuario usuario : usuarios) {
-            if (usuario.getEmail().equalsIgnoreCase(nombreUsuario) && usuario.getClave().equalsIgnoreCase(claveUsuario)){
-                return usuario;
+    public void createSimpleDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle(R.string.registrar);
+        builder.setMessage(R.string.confirmacion);
+        builder.setPositiveButton(R.string.aceptar, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                Log.d("Correct", "Email sent.");
             }
-        }
-        return null;
-    }*/
+        });
+        builder.show();
+    }
 
     public int comprobaciones(String email, String clave){
         // Si existe el usuario devuelve 1
-        if (comprobarUsuarioExiste(email))
-            return 1;
-
-        // Si no es mayor de edad devuelve 2
-        /*if (!comprobarMayorEdad(edad))
-            return 2;*/
+        /*if (comprobarUsuarioExiste(email))
+            return 1;*/
 
         // Si no valida email devuelve 3
         if (!validaEmail(email))
-            return 3;
+            return 2;
 
         // Si no valida clave devuelve 4
         if(!validaClave(clave)){
             txtRequisitos.setVisibility(View.VISIBLE);
-            return 4;
+            return 3;
         }else
             txtRequisitos.setVisibility(View.GONE);
 
         return 0;
     }
 
-    public boolean comprobarUsuarioExiste(String email){
+    /*public boolean comprobarUsuarioExiste(String email){
         Usuario usuario = new Usuario(email);
         Usuario usuDB = (Usuario)usuarioDAO.search(usuario);
         if (usuDB != null) return true;
         return false;
-    }
-
-    /*public boolean comprobarMayorEdad(int edad){
-        return edad >= 18;
     }*/
 
     // Valida email pasado como String mediante un pattern

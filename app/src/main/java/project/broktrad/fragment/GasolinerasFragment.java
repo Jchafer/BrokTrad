@@ -15,73 +15,40 @@ import java.util.ArrayList;
 import project.broktrad.R;
 import project.broktrad.adapter.AdapterGasolineras;
 import project.broktrad.pojo.Gasolinera;
+import project.broktrad.pojo.GasolineraApi;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link GasolinerasFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
 public class GasolinerasFragment extends Fragment {
 
-    private ArrayList<Gasolinera> gasolineras;
-    
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
-
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
+    //private ArrayList<Gasolinera> gasolineras;
+    private ArrayList<GasolineraApi> gasolinerasApi;
 
     public GasolinerasFragment() {
         // Required empty public constructor
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment AccionesFragment.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static GasolinerasFragment newInstance(String param1, String param2) {
-        GasolinerasFragment fragment = new GasolinerasFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
-    }
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        gasolineras = (ArrayList<Gasolinera>) getArguments().get("Gasolineras");
+        //gasolineras = (ArrayList<Gasolinera>) getArguments().get("Gasolineras");
+        gasolinerasApi = (ArrayList<GasolineraApi>) getArguments().get("Gasolineras");
 
         View myInflatedView = inflater.inflate(R.layout.fragment_gasolineras, container, false);
 
         ListView listadoGasolineras = (ListView) myInflatedView.findViewById(R.id.listViewGasolineras);
 
-        listadoGasolineras.setAdapter(new AdapterGasolineras(this, gasolineras));
+        listadoGasolineras.setAdapter(new AdapterGasolineras(this, gasolinerasApi));
 
         listadoGasolineras.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> list, View view, int pos, long id) {
                 Fragment frgDatosGasol = new DatosFragment();
                 Bundle args = new Bundle();
-                args.putSerializable("Gasolinera", gasolineras.get(pos));
+                args.putSerializable("Gasolinera", gasolinerasApi.get(pos));
                 frgDatosGasol.setArguments(args);
                 getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.contenedor, frgDatosGasol)
                         .addToBackStack(null).commit();
