@@ -4,7 +4,6 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.content.ContentValues;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -32,9 +31,6 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import project.broktrad.R;
-import project.broktrad.bd.MiBD;
-import project.broktrad.dao.UsuarioDAO;
-import project.broktrad.pojo.Usuario;
 
 public class LoginActivity extends AppCompatActivity implements View.OnClickListener, CompoundButton.OnCheckedChangeListener {
 

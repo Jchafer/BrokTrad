@@ -6,9 +6,9 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
 import project.broktrad.bd.MiBD;
-import project.broktrad.pojo.Usuario;
+import project.broktrad.pojo.UsuarioBorrar;
 
-public class UsuarioDAO {
+public class UsuarioDAOBorrar {
 
     /**
      * Definimos constante con el nombre de la tabla
@@ -31,11 +31,11 @@ public class UsuarioDAO {
      */
     private String[] columnas = new String[]{ C_COLUMNA_ID_EMAIL, C_COLUMNA_CLAVE, C_COLUMNA_NICK, C_COLUMNA_ADMIN } ;
 
-    public UsuarioDAO(Context context) {
+    public UsuarioDAOBorrar(Context context) {
         this.contexto = context;
     }
 
-    public UsuarioDAO abrir(){
+    public UsuarioDAOBorrar abrir(){
         miBD = new MiBD(contexto);
         db = miBD.getWritableDatabase();
         return this;
@@ -88,13 +88,13 @@ public class UsuarioDAO {
     }
 
     public Object search(Object obj) {
-        Usuario c = (Usuario) obj;
+        UsuarioBorrar c = (UsuarioBorrar) obj;
         String condicion = C_COLUMNA_ID_EMAIL + "='" + c.getEmail() + "'";
 
         Cursor cursor = db.query("usuarios", columnas, condicion, null, null, null, null);
-        Usuario nuevoUsuario = null;
+        UsuarioBorrar nuevoUsuario = null;
         if (cursor.moveToFirst()) {
-            nuevoUsuario = new Usuario();
+            nuevoUsuario = new UsuarioBorrar();
             nuevoUsuario.setEmail(cursor.getString(0));
             nuevoUsuario.setClave(cursor.getString(1));
             nuevoUsuario.setNick(cursor.getString(2));

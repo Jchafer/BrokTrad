@@ -3,19 +3,19 @@ package project.broktrad.pojo;
 import java.io.Serializable;
 import java.util.ArrayList;
 
-public class Usuario implements Serializable {
+public class UsuarioBorrar implements Serializable {
 
     private String email;
     private String clave;
     private String nick;
     private boolean admin;
-    private ArrayList<Gasolinera> favoritos;
+    private ArrayList<GasolineraBorrar> favoritos;
 
-    public Usuario() {
+    public UsuarioBorrar() {
         this.favoritos = new ArrayList();
     }
 
-    public Usuario(String email) {
+    public UsuarioBorrar(String email) {
         this.email = email;
         this.clave = null;
         this.nick = null;
@@ -23,7 +23,7 @@ public class Usuario implements Serializable {
         this.favoritos = new ArrayList();
     }
 
-    public Usuario(String email, String clave, String nick) {
+    public UsuarioBorrar(String email, String clave, String nick) {
         this.email = email;
         this.clave = clave;
         this.nick = nick;
@@ -31,7 +31,7 @@ public class Usuario implements Serializable {
         this.favoritos = new ArrayList();
     }
 
-    public Usuario(String email, String clave) {
+    public UsuarioBorrar(String email, String clave) {
         this.email = email;
         this.clave = clave;
         this.nick = null;
@@ -63,11 +63,11 @@ public class Usuario implements Serializable {
         this.nick = nick;
     }
 
-    public ArrayList<Gasolinera> getFavoritos() {
+    public ArrayList<GasolineraBorrar> getFavoritos() {
         return favoritos;
     }
 
-    public void setFavoritos(ArrayList<Gasolinera> favoritos) {
+    public void setFavoritos(ArrayList<GasolineraBorrar> favoritos) {
         this.favoritos = favoritos;
     }
 

@@ -8,8 +8,6 @@ import android.util.Log;
 import java.io.Serializable;
 
 import project.broktrad.dao.FavoritoDAO;
-import project.broktrad.dao.GasolineraDAO;
-import project.broktrad.dao.UsuarioDAO;
 
 public class MiBD extends SQLiteOpenHelper implements Serializable {
 

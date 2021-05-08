@@ -9,7 +9,6 @@ import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,18 +19,14 @@ import android.widget.Toast;
 //import com.google.api.core.ApiFuture;
 //import com.google.firebase.firestore.FirebaseFirestore;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import project.broktrad.activity.MapsActivity;
 import project.broktrad.R;
 import project.broktrad.dao.FavoritoDAO;
 import project.broktrad.pojo.Gasolinera;
-import project.broktrad.pojo.GasolineraApi;
 
 public class DatosFragment extends Fragment {
 
-    private GasolineraApi gasolinera;
+    private Gasolinera gasolinera;
     private Cursor cursor;
     private String email;
     //private FirebaseFirestore db = FirebaseFirestore.getInstance();
@@ -48,7 +43,7 @@ public class DatosFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        gasolinera = (GasolineraApi) getArguments().get("Gasolinera");
+        gasolinera = (Gasolinera) getArguments().get("Gasolinera");
 
         View myInflatedView = inflater.inflate(R.layout.fragment_datos, container, false);
 

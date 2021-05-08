@@ -12,14 +12,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import project.broktrad.R;
-import project.broktrad.pojo.GasolineraApi;
+import project.broktrad.pojo.Gasolinera;
 import project.broktrad.pojo.GasolinerasJson;
 import project.broktrad.pojo.Municipio;
 import project.broktrad.service.ApiService;
@@ -36,7 +35,7 @@ public class BuscadorFragment extends Fragment {
     private Button buscar;
     private ArrayList<Municipio> municipios = new ArrayList<>();
     private Municipio municipioSeleccionado = null;
-    private ArrayList<GasolineraApi> gasolinerasSeleccionadas = new ArrayList<>();
+    private ArrayList<Gasolinera> gasolinerasSeleccionadas = new ArrayList<>();
 
     public BuscadorFragment() {
         // Required empty public constructor
@@ -113,8 +112,8 @@ public class BuscadorFragment extends Fragment {
 
             @Override
             public void onResponse(Call<GasolinerasJson> call, Response<GasolinerasJson> response) {
-                for(GasolineraApi gasolineraApi : response.body().getListaGasolineras()) {
-                    gasolinerasSeleccionadas.add(gasolineraApi);
+                for(Gasolinera gasolinera : response.body().getListaGasolineras()) {
+                    gasolinerasSeleccionadas.add(gasolinera);
                 }
 
                 SharedPreferences.Editor editor = prefs.edit();

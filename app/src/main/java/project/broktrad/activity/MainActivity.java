@@ -2,7 +2,6 @@ package project.broktrad.activity;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
-import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
@@ -11,22 +10,18 @@ import androidx.fragment.app.Fragment;
 
 import android.content.ContentValues;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
-import android.database.Cursor;
 import android.os.Bundle;
 import android.os.StrictMode;
 import android.preference.PreferenceManager;
-import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.material.navigation.NavigationView;
-import com.google.firebase.auth.ktx.AuthKt;
 
 import org.apache.poi.hssf.usermodel.HSSFCell;
 import org.apache.poi.hssf.usermodel.HSSFRow;
@@ -36,8 +31,6 @@ import org.apache.poi.poifs.filesystem.POIFSFileSystem;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
 
-import java.io.BufferedInputStream;
-import java.io.BufferedReader;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.File;
@@ -45,30 +38,21 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
 import java.util.ArrayList;
 import java.util.Iterator;
-import java.util.List;
 import java.util.Locale;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 import project.broktrad.R;
 import project.broktrad.bd.MiBD;
 import project.broktrad.dao.FavoritoDAO;
-import project.broktrad.dao.GasolineraDAO;
+import project.broktrad.dao.GasolineraDAOBorrar;
 import project.broktrad.fragment.BuscadorFragment;
 import project.broktrad.fragment.DatosFragment;
-import project.broktrad.fragment.GasolinerasFavoritasFragment;
+import project.broktrad.fragment.GasolinerasFragment;
 import project.broktrad.pojo.Gasolinera;
-import project.broktrad.pojo.GasolineraApi;
 import project.broktrad.pojo.GasolinerasJson;
-import project.broktrad.pojo.Municipio;
-import project.broktrad.pojo.Usuario;
 import project.broktrad.service.ApiService;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -86,7 +70,7 @@ public class MainActivity extends AppCompatActivity {
     private DrawerLayout drawerLayout;
     private TextView textEmail;
     private TextView textNick;
-    private TextView textFecha;
+    //private TextView textFecha;
 
     private SharedPreferences prefs;
 
@@ -134,7 +118,7 @@ public class MainActivity extends AppCompatActivity {
         View view = navigationView.getHeaderView(0);
         textEmail = (TextView) view.findViewById(R.id.textEmailNav);
         textNick = (TextView) view.findViewById(R.id.textNickNav);
-        textFecha = (TextView) view.findViewById(R.id.textFechaNav);
+        //textFecha = (TextView) view.findViewById(R.id.textFechaNav);
         drawerLayout = (DrawerLayout)findViewById(R.id.drawer);
 
         cargaDatos();
@@ -159,8 +143,8 @@ public class MainActivity extends AppCompatActivity {
                         drawerLayout.closeDrawer(GravityCompat.START);
                         break;
                     case R.id.nav_favoritas:
-                        fragment = new GasolinerasFavoritasFragment();
-                        ArrayList<GasolineraApi> gasolinerasFavoritas = new ArrayList();
+                        fragment = new GasolinerasFragment();
+                        ArrayList<Gasolinera> gasolinerasFavoritas = new ArrayList();
                         ArrayList<String> idGasolineras = favoritoDAO.gasolinerasFavoritas((String) textEmail.getText());
                         if (!idGasolineras.isEmpty()){
                             Retrofit retrofit = new Retrofit.Builder()
@@ -174,13 +158,13 @@ public class MainActivity extends AppCompatActivity {
                                 @Override
                                 public void onResponse(Call<GasolinerasJson> call, Response<GasolinerasJson> response) {
                                     for (int i = 0; i < idGasolineras.size(); i++) {
-                                        for(GasolineraApi gasolineraApi : response.body().getListaGasolineras()) {
-                                            if (idGasolineras.get(i).equalsIgnoreCase(gasolineraApi.getIDGasolinera()))
-                                                gasolinerasFavoritas.add(gasolineraApi);
+                                        for(Gasolinera gasolinera : response.body().getListaGasolineras()) {
+                                            if (idGasolineras.get(i).equalsIgnoreCase(gasolinera.getIDGasolinera()))
+                                                gasolinerasFavoritas.add(gasolinera);
                                         }
                                     }
 
-                                    args.putSerializable("GasolinerasFavoritas", gasolinerasFavoritas);
+                                    args.putSerializable("Gasolineras", gasolinerasFavoritas);
                                     fragment.setArguments(args);
                                     getSupportFragmentManager().beginTransaction().replace(R.id.contenedor, fragment).addToBackStack(null).commit();
 
@@ -264,7 +248,7 @@ public class MainActivity extends AppCompatActivity {
         // Asignar datos usuario
         textEmail.setText(prefs.getString("email", "email@gmail.com"));
         textNick.setText(prefs.getString("nick", "Nick"));
-        textFecha.setText(getResources().getString(R.string.ultima_busqueda) + " " + prefs.getString("fecha_Actualizacion", "Fecha"));
+        //extFecha.setText(getResources().getString(R.string.ultima_busqueda) + " " + prefs.getString("fecha_Actualizacion", "Fecha"));
 
         prefsManager = PreferenceManager.getDefaultSharedPreferences(MainActivity.this);
 
@@ -364,51 +348,51 @@ public class MainActivity extends AppCompatActivity {
                         countColumn ++;
                         switch (countColumn){
                             case 1:
-                                reg.put(GasolineraDAO.C_COLUMNA_PROVINCIA, cell.toString());
+                                reg.put(GasolineraDAOBorrar.C_COLUMNA_PROVINCIA, cell.toString());
                                 break;
 
                             case 2:
-                                reg.put(GasolineraDAO.C_COLUMNA_MUNICIPIO, cell.toString());
+                                reg.put(GasolineraDAOBorrar.C_COLUMNA_MUNICIPIO, cell.toString());
                                 break;
 
                             case 4:
-                                reg.put(GasolineraDAO.C_COLUMNA_CODPOSTAL, cell.toString());
+                                reg.put(GasolineraDAOBorrar.C_COLUMNA_CODPOSTAL, cell.toString());
                                 break;
 
                             case 5:
-                                reg.put(GasolineraDAO.C_COLUMNA_DIRECCION, cell.toString());
+                                reg.put(GasolineraDAOBorrar.C_COLUMNA_DIRECCION, cell.toString());
                                 break;
 
                             case 7:
-                                reg.put(GasolineraDAO.C_COLUMNA_ID_LONGITUD, cell.toString());
+                                reg.put(GasolineraDAOBorrar.C_COLUMNA_ID_LONGITUD, cell.toString());
                                 break;
 
                             case 8:
-                                reg.put(GasolineraDAO.C_COLUMNA_ID_LATITUD, cell.toString());
+                                reg.put(GasolineraDAOBorrar.C_COLUMNA_ID_LATITUD, cell.toString());
                                 break;
 
                             case 9:
-                                reg.put(GasolineraDAO.C_COLUMNA_PRECIOGASOLINA95, cell.toString());
+                                reg.put(GasolineraDAOBorrar.C_COLUMNA_PRECIOGASOLINA95, cell.toString());
                                 break;
 
                             case 12:
-                                reg.put(GasolineraDAO.C_COLUMNA_PRECIOGASOLINA98, cell.toString());
+                                reg.put(GasolineraDAOBorrar.C_COLUMNA_PRECIOGASOLINA98, cell.toString());
                                 break;
 
                             case 14:
-                                reg.put(GasolineraDAO.C_COLUMNA_PRECIOGASOLEOA, cell.toString());
+                                reg.put(GasolineraDAOBorrar.C_COLUMNA_PRECIOGASOLEOA, cell.toString());
                                 break;
 
                             case 15:
-                                reg.put(GasolineraDAO.C_COLUMNA_PRECIOGASOLEOPREMIUM, cell.toString());
+                                reg.put(GasolineraDAOBorrar.C_COLUMNA_PRECIOGASOLEOPREMIUM, cell.toString());
                                 break;
 
                             case 26:
-                                reg.put(GasolineraDAO.C_COLUMNA_ROTULO, cell.toString());
+                                reg.put(GasolineraDAOBorrar.C_COLUMNA_ROTULO, cell.toString());
                                 break;
 
                             case 29:
-                                reg.put(GasolineraDAO.C_COLUMNA_HORARIO, cell.toString());
+                                reg.put(GasolineraDAOBorrar.C_COLUMNA_HORARIO, cell.toString());
                                 break;
 
                             default:
@@ -420,7 +404,7 @@ public class MainActivity extends AppCompatActivity {
 
                     // Si getCount() devuelve 0, no hay registro con esos ids
                     // Si getCount() devuelve 1, hay un registro con esos ids
-                    if (reg.getAsString(GasolineraDAO.C_COLUMNA_PROVINCIA).contains("VALENCIA")){
+                    if (reg.getAsString(GasolineraDAOBorrar.C_COLUMNA_PROVINCIA).contains("VALENCIA")){
                         //if (c.getCount() == 0) gasolineraDAO.add(reg);
                         //else gasolineraDAO.update(reg);
                     }

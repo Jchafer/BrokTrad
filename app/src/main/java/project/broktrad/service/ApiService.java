@@ -20,10 +20,10 @@ public interface ApiService {
     @GET(API_ROUTE_MUNICIPIOS_VALENCIA)
     Call<List<Municipio>> getMunicipios();
 
-    @GET(API_ROUTE_GASOLINERAS_VALENCIA)
-    Call<GasolinerasJson> getGasolinerasValencia();
-
     @GET(API_ROUTE_GASOLINERAS_MUNICIPIO)
     Call<GasolinerasJson> getGasolinerasMunicipio(@Path("idMunicipio") String idMunicipio);
+
+    @GET(API_ROUTE_GASOLINERAS_VALENCIA)
+    Call<GasolinerasJson> getGasolinerasValencia();
 
 }

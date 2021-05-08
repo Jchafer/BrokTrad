@@ -15,12 +15,11 @@ import java.util.ArrayList;
 import project.broktrad.R;
 import project.broktrad.adapter.AdapterGasolineras;
 import project.broktrad.pojo.Gasolinera;
-import project.broktrad.pojo.GasolineraApi;
 
 public class GasolinerasFragment extends Fragment {
 
     //private ArrayList<Gasolinera> gasolineras;
-    private ArrayList<GasolineraApi> gasolinerasApi;
+    private ArrayList<Gasolinera> gasolinerasApi;
 
     public GasolinerasFragment() {
         // Required empty public constructor
@@ -35,7 +34,7 @@ public class GasolinerasFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         //gasolineras = (ArrayList<Gasolinera>) getArguments().get("Gasolineras");
-        gasolinerasApi = (ArrayList<GasolineraApi>) getArguments().get("Gasolineras");
+        gasolinerasApi = (ArrayList<Gasolinera>) getArguments().get("Gasolineras");
 
         View myInflatedView = inflater.inflate(R.layout.fragment_gasolineras, container, false);
 

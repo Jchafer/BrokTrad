@@ -9,10 +9,9 @@ import android.util.Log;
 import java.util.ArrayList;
 
 import project.broktrad.bd.MiBD;
-import project.broktrad.pojo.Gasolinera;
-import project.broktrad.pojo.Usuario;
+import project.broktrad.pojo.GasolineraBorrar;
 
-public class GasolineraDAO {
+public class GasolineraDAOBorrar {
     /**
      * Definimos constante con el nombre de la tabla
      */
@@ -45,11 +44,11 @@ public class GasolineraDAO {
             C_COLUMNA_PRECIOGASOLINA98, C_COLUMNA_PRECIOGASOLEOA, C_COLUMNA_PRECIOGASOLEOPREMIUM, C_COLUMNA_ROTULO,
             C_COLUMNA_HORARIO} ;
 
-    public GasolineraDAO(Context context) {
+    public GasolineraDAOBorrar(Context context) {
         this.contexto = context;
     }
 
-    public GasolineraDAO abrir(){
+    public GasolineraDAOBorrar abrir(){
         miBD = new MiBD(contexto);
         db = miBD.getWritableDatabase();
         return this;
@@ -104,7 +103,7 @@ public class GasolineraDAO {
     }
 
     public ArrayList getGasolineras(String email) {
-        ArrayList<Gasolinera> listaGasolineras = new ArrayList();
+        ArrayList<GasolineraBorrar> listaGasolineras = new ArrayList();
 
         FavoritoDAO favoritoDAO = miBD.getFavoritoDAO();
         favoritoDAO.abrir();
@@ -115,7 +114,7 @@ public class GasolineraDAO {
                 Cursor cursorGasolinera = getRegistro(cursorFavoritos.getString(0), cursorFavoritos.getString(1));
                 if (cursorGasolinera.moveToFirst()) {
                     do {
-                        Gasolinera g = new Gasolinera();
+                        GasolineraBorrar g = new GasolineraBorrar();
                         //g.setLongitud(Long.parseLong(cursorGasolinera.getString(0)));
                         g.setLongitud(cursorGasolinera.getString(0));
                         g.setLatitud(cursorGasolinera.getString(1));
@@ -140,7 +139,7 @@ public class GasolineraDAO {
     }
 
     public ArrayList getGasolinerasTodas() {
-        ArrayList<Gasolinera> listaGasolineras = new ArrayList();
+        ArrayList<GasolineraBorrar> listaGasolineras = new ArrayList();
 
         Cursor cursor = getCursor();
         if (cursor.moveToFirst()) {
@@ -149,7 +148,7 @@ public class GasolineraDAO {
                 Cursor cursorGasolinera = getRegistro(cursor.getString(0), cursor.getString(1));
                 if (cursorGasolinera.moveToFirst()) {
                     do {
-                        Gasolinera g = new Gasolinera();
+                        GasolineraBorrar g = new GasolineraBorrar();
                         //g.setLongitud(Long.parseLong(cursorGasolinera.getString(0)));
                         g.setLongitud(cursorGasolinera.getString(0));
                         g.setLatitud(cursorGasolinera.getString(1));
@@ -185,8 +184,8 @@ public class GasolineraDAO {
         return c;
     }
 
-    public  ArrayList<Gasolinera> gasolinerasPorMunicipio(String municipio){
-        ArrayList<Gasolinera> gasolineras = new ArrayList();
+    public  ArrayList<GasolineraBorrar> gasolinerasPorMunicipio(String municipio){
+        ArrayList<GasolineraBorrar> gasolineras = new ArrayList();
 
         String condicion = C_COLUMNA_MUNICIPIO + "='" + municipio.toUpperCase() + "'";
         Cursor cursor = db.query(true, C_TABLA, columnas, condicion, null, null, null, null,null);
@@ -197,7 +196,7 @@ public class GasolineraDAO {
                 Cursor cursorGasolinera = getRegistro(cursor.getString(0), cursor.getString(1));
                 if (cursorGasolinera.moveToFirst()) {
                     do {
-                        Gasolinera g = new Gasolinera();
+                        GasolineraBorrar g = new GasolineraBorrar();
                         //g.setLongitud(Long.parseLong(cursorGasolinera.getString(0)));
                         g.setLongitud(cursorGasolinera.getString(0));
                         g.setLatitud(cursorGasolinera.getString(1));

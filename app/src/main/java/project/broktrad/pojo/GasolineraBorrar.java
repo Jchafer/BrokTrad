@@ -1,38 +1,39 @@
 package project.broktrad.pojo;
 
-import com.google.gson.annotations.SerializedName;
-
 import java.io.Serializable;
 
-public class GasolineraApi implements Serializable {
-    @SerializedName("Provincia")
+public class GasolineraBorrar implements Serializable {
+
     private String provincia;
-    @SerializedName("Municipio")
     private String municipio;
-    @SerializedName("C.P.")
     private String codPostal;
-    @SerializedName("Dirección")
     private String direccion;
-    @SerializedName("Longitud (WGS84)")
     private String longitud;
-    @SerializedName("Latitud")
     private String latitud;
-    @SerializedName("Precio Gasolina 95 E5")
     private String precioGasolina95;
-    @SerializedName("Precio Gasolina 98 E5")
     private String precioGasolina98;
-    @SerializedName("Precio Gasoleo A")
     private String precioGasoleoA;
-    @SerializedName("Precio Gasoleo Premium")
     private String precioGasoleoPremium;
-    @SerializedName("Rótulo")
     private String rotulo;
-    @SerializedName("Horario")
     private String horario;
-    @SerializedName("IDEESS")
-    private String IDGasolinera;
-    @SerializedName("IDMunicipio")
-    private String IDMunicipio;
+
+    public GasolineraBorrar() {
+    }
+
+    public GasolineraBorrar(String provincia, String municipio, String codPostal, String direccion, String longitud, String latitud, String precioGasolina95, String precioGasolina98, String precioGasoleoA, String precioGasoleoPremium, String rotulo, String horario) {
+        this.provincia = provincia;
+        this.municipio = municipio;
+        this.codPostal = codPostal;
+        this.direccion = direccion;
+        this.longitud = longitud;
+        this.latitud = latitud;
+        this.precioGasolina95 = precioGasolina95;
+        this.precioGasolina98 = precioGasolina98;
+        this.precioGasoleoA = precioGasoleoA;
+        this.precioGasoleoPremium = precioGasoleoPremium;
+        this.rotulo = rotulo;
+        this.horario = horario;
+    }
 
     public String getProvincia() {
         return provincia;
@@ -130,39 +131,21 @@ public class GasolineraApi implements Serializable {
         this.horario = horario;
     }
 
-    public String getIDGasolinera() {
-        return IDGasolinera;
-    }
-
-    public void setIDGasolinera(String IDGasolinera) {
-        this.IDGasolinera = IDGasolinera;
-    }
-
-    public String getIDMunicipio() {
-        return IDMunicipio;
-    }
-
-    public void setIDMunicipio(String IDMunicipio) {
-        this.IDMunicipio = IDMunicipio;
-    }
-
     @Override
     public String toString() {
-        return "GasolineraApi{" +
+        return "Gasolinera{" +
                 "provincia='" + provincia + '\'' +
                 ", municipio='" + municipio + '\'' +
                 ", codPostal='" + codPostal + '\'' +
                 ", direccion='" + direccion + '\'' +
-                ", longitud='" + longitud + '\'' +
-                ", latitud='" + latitud + '\'' +
-                ", precioGasolina95='" + precioGasolina95 + '\'' +
-                ", precioGasolina98='" + precioGasolina98 + '\'' +
-                ", precioGasoleoA='" + precioGasoleoA + '\'' +
-                ", precioGasoleoPremium='" + precioGasoleoPremium + '\'' +
+                ", longitud=" + longitud +
+                ", latitud=" + latitud +
+                ", precioGasolina95=" + precioGasolina95 +
+                ", precioGasolina98=" + precioGasolina98 +
+                ", precioGasoleoA=" + precioGasoleoA +
+                ", precioGasoleoPremium=" + precioGasoleoPremium +
                 ", rotulo='" + rotulo + '\'' +
                 ", horario='" + horario + '\'' +
-                ", IDGasolinera='" + IDGasolinera + '\'' +
-                ", IDMunicipio='" + IDMunicipio + '\'' +
                 '}';
     }
 }

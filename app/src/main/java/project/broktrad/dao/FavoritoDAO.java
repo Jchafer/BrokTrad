@@ -4,21 +4,10 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.util.Log;
 
 import java.util.ArrayList;
 
 import project.broktrad.bd.MiBD;
-import project.broktrad.pojo.Gasolinera;
-import project.broktrad.pojo.GasolineraApi;
-import project.broktrad.pojo.GasolinerasJson;
-import project.broktrad.pojo.Usuario;
-import project.broktrad.service.ApiService;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
-import retrofit2.Retrofit;
-import retrofit2.converter.gson.GsonConverterFactory;
 
 public class FavoritoDAO {
 

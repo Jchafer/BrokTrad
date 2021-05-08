@@ -8,7 +8,7 @@ public class GasolinerasJson {
     @SerializedName("Fecha")
     private String fecha;
     @SerializedName("ListaEESSPrecio")
-    private List<GasolineraApi> listaGasolineras;
+    private List<Gasolinera> listaGasolineras;
     @SerializedName("Nota")
     private String nota;
     @SerializedName("ResultadoConsulta")
@@ -22,11 +22,11 @@ public class GasolinerasJson {
         this.fecha = fecha;
     }
 
-    public List<GasolineraApi> getListaGasolineras() {
+    public List<Gasolinera> getListaGasolineras() {
         return listaGasolineras;
     }
 
-    public void setListaGasolineras(List<GasolineraApi> listaGasolineras) {
+    public void setListaGasolineras(List<Gasolinera> listaGasolineras) {
         this.listaGasolineras = listaGasolineras;
     }
 
