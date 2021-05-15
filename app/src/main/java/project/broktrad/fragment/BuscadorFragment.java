@@ -1,6 +1,7 @@
 package project.broktrad.fragment;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 
@@ -18,6 +19,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import project.broktrad.R;
+import project.broktrad.activity.MapsActivity;
 import project.broktrad.pojo.Gasolinera;
 import project.broktrad.pojo.GasolinerasJson;
 import project.broktrad.pojo.Municipio;
@@ -33,6 +35,7 @@ public class BuscadorFragment extends Fragment {
     private SharedPreferences prefs;
     private EditText municipio;
     private Button buscar;
+    private Button buscarPosicion;
     private ArrayList<Municipio> municipios = new ArrayList<>();
     private Municipio municipioSeleccionado = null;
     private ArrayList<Gasolinera> gasolinerasSeleccionadas = new ArrayList<>();
@@ -73,6 +76,15 @@ public class BuscadorFragment extends Fragment {
 
                 else
                     Toast.makeText(getActivity(), R.string.ningun_municipio, Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        buscarPosicion = (Button) myInflatedView.findViewById(R.id.button_buscar_posicion);
+        buscarPosicion.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(getActivity(), MapsActivity.class);
+                startActivity(i);
             }
         });
 

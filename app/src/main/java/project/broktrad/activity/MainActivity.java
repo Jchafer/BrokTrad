@@ -248,7 +248,7 @@ public class MainActivity extends AppCompatActivity {
         // Asignar datos usuario
         textEmail.setText(prefs.getString("email", "email@gmail.com"));
         textNick.setText(prefs.getString("nick", "Nick"));
-        //extFecha.setText(getResources().getString(R.string.ultima_busqueda) + " " + prefs.getString("fecha_Actualizacion", "Fecha"));
+        //textFecha.setText(getResources().getString(R.string.ultima_busqueda) + " " + prefs.getString("fecha_Actualizacion", "Fecha"));
 
         prefsManager = PreferenceManager.getDefaultSharedPreferences(MainActivity.this);
 

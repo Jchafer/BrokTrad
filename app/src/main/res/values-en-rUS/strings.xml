@@ -63,4 +63,7 @@
     <string name="ultima_busqueda">Last search: </string>
     <string name="sin_municipios">Cities could not be obtained</string>
     <string name="sin_gasolineras">Could not get gas stations</string>
+    <string name="location_permission_denied">Permission denied</string>
+    <string name="permission_required_toast">Permission required</string>
+    <string name="permission_rationale_location">Location permission</string>
 </resources>

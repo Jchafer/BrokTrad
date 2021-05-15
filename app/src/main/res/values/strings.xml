@@ -62,4 +62,7 @@
     <string name="ultima_busqueda">Última búsqueda: </string>
     <string name="sin_municipios">No se pudieron obtener municipios</string>
     <string name="sin_gasolineras">No se pudieron obtener gasolineras</string>
+    <string name="location_permission_denied">Permiso denegado</string>
+    <string name="permission_required_toast">Permiso requerido</string>
+    <string name="permission_rationale_location">Permiso de localización</string>
 </resources>
