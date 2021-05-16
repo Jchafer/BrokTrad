@@ -1,4 +1,4 @@
-package project.broktrad.activity;
+package project.broktrad.utilities;
 
 import android.Manifest;
 import android.app.AlertDialog;

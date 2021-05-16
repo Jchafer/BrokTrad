@@ -66,4 +66,6 @@
     <string name="location_permission_denied">Permission denied</string>
     <string name="permission_required_toast">Permission required</string>
     <string name="permission_rationale_location">Location permission</string>
+    <string name="gasolinera_cercana">Nearest gas station</string>
+    <string name="ubicacion_actual">Current location</string>
 </resources>

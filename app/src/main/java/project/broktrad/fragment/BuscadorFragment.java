@@ -30,6 +30,8 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
+import java.text.Normalizer;
+
 public class BuscadorFragment extends Fragment {
 
     private SharedPreferences prefs;
@@ -64,8 +66,9 @@ public class BuscadorFragment extends Fragment {
                 gasolinerasSeleccionadas.clear();
 
                 // Obtenemos nombre introducido y comprobamos si existe en la lista de municipios
+
                 for (Municipio municipio : municipios) {
-                    if (municipio.getNombre().toUpperCase().equalsIgnoreCase(municipioIntroducido.toUpperCase())){
+                    if (cleanString(municipio.getNombre().toUpperCase()).equalsIgnoreCase(cleanString(municipioIntroducido.toUpperCase()))){
                         municipioSeleccionado = municipio;
                     }
                 }
@@ -76,6 +79,7 @@ public class BuscadorFragment extends Fragment {
 
                 else
                     Toast.makeText(getActivity(), R.string.ningun_municipio, Toast.LENGTH_SHORT).show();
+                municipioSeleccionado = null;
             }
         });
 
@@ -83,8 +87,7 @@ public class BuscadorFragment extends Fragment {
         buscarPosicion.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent i = new Intent(getActivity(), MapsActivity.class);
-                startActivity(i);
+                getGasolineras();
             }
         });
 
@@ -128,11 +131,7 @@ public class BuscadorFragment extends Fragment {
                     gasolinerasSeleccionadas.add(gasolinera);
                 }
 
-                SharedPreferences.Editor editor = prefs.edit();
-                Log.e("Fecha", response.body().getFecha());
-                editor.putString("fecha_Actualizacion", response.body().getFecha());
-                editor.apply();
-
+                // Pasamos una lista de gasolineras que tiene el municipio
                 Fragment frgGasolineras = new GasolinerasFragment();
                 Bundle args = new Bundle();
                 args.putSerializable("Gasolineras", gasolinerasSeleccionadas);
@@ -146,6 +145,41 @@ public class BuscadorFragment extends Fragment {
                 Toast.makeText(getActivity(), R.string.sin_gasolineras, Toast.LENGTH_SHORT).show();
             }
         });
+    }
+
+    private void getGasolineras() {
+
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl("https://sedeaplicaciones.minetur.gob.es/")
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+        ApiService apiService = retrofit.create(ApiService.class);
+        Call<GasolinerasJson> call = apiService.getGasolinerasValencia();
+        call.enqueue(new Callback<GasolinerasJson>() {
+
+            @Override
+            public void onResponse(Call<GasolinerasJson> call, Response<GasolinerasJson> response) {
+                for(Gasolinera gasolinera : response.body().getListaGasolineras()) {
+                    gasolinerasSeleccionadas.add(gasolinera);
+                }
+
+                // Pasamos una lista de todas las gasolineras de Valencia
+                Intent i = new Intent(getActivity(), MapsActivity.class);
+                i.putExtra("Gasolineras", gasolinerasSeleccionadas);
+                startActivity(i);
+            }
+            @Override
+            public void onFailure(Call<GasolinerasJson> call, Throwable t) {
+                Toast.makeText(getActivity(), R.string.sin_gasolineras, Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    // Devuelve el mismo string que recibe, pero sin acentos
+    public static String cleanString(String texto) {
+        texto = Normalizer.normalize(texto, Normalizer.Form.NFD);
+        texto = texto.replaceAll("[\\p{InCombiningDiacriticalMarks}]", "");
+        return texto;
     }
 
 }

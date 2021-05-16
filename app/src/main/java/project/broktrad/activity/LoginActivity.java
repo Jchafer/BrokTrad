@@ -27,10 +27,8 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
 import project.broktrad.R;
+import project.broktrad.utilities.Validaciones;
 
 public class LoginActivity extends AppCompatActivity implements View.OnClickListener, CompoundButton.OnCheckedChangeListener {
 
@@ -40,16 +38,8 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     private TextView txtRequisitos;
     private TextView txtNick;
     private Button inicioSesion;
-    // private RadioButton entrar;
     private RadioButton registrar;
-
-    //private Usuario usuario;
-
     private SharedPreferences prefs;
-
-    //private MiBD miBD;
-    //private UsuarioDAO usuarioDAO;
-
     private FirebaseAuth auth;
 
     @Override
@@ -59,10 +49,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         setContentView(R.layout.activity_login);
 
         auth = FirebaseAuth.getInstance();
-
-        /*miBD = MiBD.getInstance(this);
-        usuarioDAO = new UsuarioDAO(this);
-        usuarioDAO.abrir();*/
 
         //Agregar animaciones
         Animation animacion1 = AnimationUtils.loadAnimation(this, R.anim.desplazamiento_izquierda);
@@ -92,12 +78,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         prefs = getSharedPreferences("prefersUsuario", Context.MODE_PRIVATE);
     }
 
-    /*private void saveOnPreferences(String email) {
-        SharedPreferences.Editor editor = prefs.edit();
-        editor.putString("email", email);
-        editor.apply();
-    }*/
-
     @Override
     public void onClick(View view) {
 
@@ -106,27 +86,11 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         String nickPasado = nickUsuario.getText().toString();
 
         if (!registrar.isChecked()){
-            // Login solo en Firebase
+            // Login en Firebase
             login(emailPasada, clavePasada);
-
-            // Login en Firebase y en BBDD de la aplicación
-            /*Usuario usuEnBD = (Usuario) usuarioDAO.search(usuario);
-            usuario = comprobarUsuarioCorrecto(emailPasada, clavePasada);
-            if (usuEnBD != null)
-                login(emailPasada, clavePasada, nickPasado);
-            else
-                Toast.makeText(this, R.string.usuario_incorrecto, Toast.LENGTH_SHORT).show();*/
         }else{
             switch (comprobaciones(emailPasada, clavePasada)){
                 case 0:
-                    // Se añade un nuevo usuario en la BD
-                    /*usuario = new Usuario(emailPasada, clavePasada, nickPasado);
-                    ContentValues reg = new ContentValues();
-                    reg.put(usuarioDAO.C_COLUMNA_ID_EMAIL, usuario.getEmail());
-                    reg.put(usuarioDAO.C_COLUMNA_CLAVE, usuario.getClave());
-                    reg.put(usuarioDAO.C_COLUMNA_NICK, usuario.getNick());
-                    usuarioDAO.add(reg);*/
-
                     register(emailPasada, clavePasada, nickPasado);
                     break;
                 case 1:
@@ -154,10 +118,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                         editor.putString("email", emailPasada);
                         editor.apply();
                         Intent intent = new Intent(getApplication(), MainActivity.class);
-                        // Se obtienen los datos del usuario en la BD
-                        /*usuario = new Usuario(email);
-                        Usuario usuEnBD = (Usuario) usuarioDAO.search(usuario);
-                        intent.putExtra("Usuario", usuEnBD);*/
                         startActivity(intent);
                     } else {
                         // Task failed with an exception
@@ -207,7 +167,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             txtRequisitos.setVisibility(View.GONE);
             inicioSesion.setText("Iniciar sesión");
         }
-
     }
 
     public void createSimpleDialog() {
@@ -224,16 +183,12 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     }
 
     public int comprobaciones(String email, String clave){
-        // Si existe el usuario devuelve 1
-        /*if (comprobarUsuarioExiste(email))
-            return 1;*/
-
         // Si no valida email devuelve 3
-        if (!validaEmail(email))
+        if (!Validaciones.validaEmail(email))
             return 2;
 
         // Si no valida clave devuelve 4
-        if(!validaClave(clave)){
+        if(!Validaciones.validaClave(clave)){
             txtRequisitos.setVisibility(View.VISIBLE);
             return 3;
         }else
@@ -242,43 +197,4 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         return 0;
     }
 
-    /*public boolean comprobarUsuarioExiste(String email){
-        Usuario usuario = new Usuario(email);
-        Usuario usuDB = (Usuario)usuarioDAO.search(usuario);
-        if (usuDB != null) return true;
-        return false;
-    }*/
-
-    // Valida email pasado como String mediante un pattern
-    public boolean validaEmail(String email){
-        // Patrón para validar el email
-        Pattern pattern = Pattern.compile("([a-z0-9]+(\\.?[a-z0-9])*)+@(([a-z]+)\\.([a-z]+))+");
-
-        Matcher mather = pattern.matcher(email);
-
-        if (mather.find() == true)
-            return true;
-
-        return false;
-
-    }
-
-    // Valida clave pasada como String mediante un pattern
-    public boolean validaClave(String clave){
-        /* Patrón para validar la clave
-        Mínimo 1 número
-        Mínimo 1 letra minúscula
-        Mínimo 1 letra mayùscula
-        Mínimo 1 caracter especial
-        Sin espacios
-        Mínimo 8 caracteres*/
-        Pattern pattern = Pattern.compile("^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=])(?=\\S+$).{8,}$");
-
-        Matcher mather = pattern.matcher(clave);
-
-        if (mather.find() == true)
-            return true;
-
-        return false;
-    }
 }

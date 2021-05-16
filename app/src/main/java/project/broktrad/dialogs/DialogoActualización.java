@@ -1,4 +1,4 @@
-package project.broktrad.dialogos;
+package project.broktrad.dialogs;
 
 import android.app.AlertDialog;
 import android.app.Dialog;

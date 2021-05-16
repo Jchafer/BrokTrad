@@ -52,11 +52,11 @@
 
     <Button
         android:id="@+id/button_buscar_posicion"
-        android:layout_width="137dp"
-        android:layout_height="46dp"
-        android:layout_marginTop="136dp"
+        android:layout_width="283dp"
+        android:layout_height="48dp"
+        android:layout_marginTop="84dp"
         android:background="@drawable/boton_azulado"
-        android:text="@string/buscar"
+        android:text="@string/gasolinera_cercana"
         android:textSize="18sp"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"

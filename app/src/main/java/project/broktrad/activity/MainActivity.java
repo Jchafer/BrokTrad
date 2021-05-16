@@ -62,29 +62,18 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class MainActivity extends AppCompatActivity {
 
-    //private Usuario usuario;
-    //private ArrayList<Gasolinera> gasolinerasTodas;
-    //private ArrayList<GasolineraApi> gasolinerasFavoritas;
     private NavigationView navigationView;
     private ActionBarDrawerToggle toggle;
     private DrawerLayout drawerLayout;
     private TextView textEmail;
     private TextView textNick;
-    //private TextView textFecha;
-
     private SharedPreferences prefs;
-
-    //private BottomNavigationView bottomNavigationView;
     private Fragment frgBuscador;
     private Fragment datosFragment;
-
-    //private GasolineraDAO gasolineraDAO;
     private FavoritoDAO favoritoDAO;
-    //private Cursor cursor;
     private MiBD miBD;
-
-    SharedPreferences prefsManager;
-    Locale localizacion;
+    private SharedPreferences prefsManager;
+    private Locale localizacion;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -103,9 +92,6 @@ public class MainActivity extends AppCompatActivity {
             e.printStackTrace();
         }
 
-        // Recibir usuario
-        //usuario = (Usuario) getIntent().getSerializableExtra("Usuario");
-
         // Obtenemos referencia a las preferencias del usuario
         prefs = getSharedPreferences("prefersUsuario", Context.MODE_PRIVATE);
 
@@ -118,7 +104,6 @@ public class MainActivity extends AppCompatActivity {
         View view = navigationView.getHeaderView(0);
         textEmail = (TextView) view.findViewById(R.id.textEmailNav);
         textNick = (TextView) view.findViewById(R.id.textNickNav);
-        //textFecha = (TextView) view.findViewById(R.id.textFechaNav);
         drawerLayout = (DrawerLayout)findViewById(R.id.drawer);
 
         cargaDatos();
@@ -126,10 +111,6 @@ public class MainActivity extends AppCompatActivity {
         toggle = new ActionBarDrawerToggle(this, drawerLayout, toolbar, R.string.open, R.string.close);
         drawerLayout.addDrawerListener(toggle);
         toggle.syncState();
-
-        // Menu inferior
-        //bottomNavigationView = (BottomNavigationView) findViewById(R.id.menu_navigation);
-        //bottomNavigationView.setOnNavigationItemSelectedListener(this);
 
         navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
@@ -204,7 +185,6 @@ public class MainActivity extends AppCompatActivity {
                     case R.id.nav_ajustes:
                         Intent intentAjustes = new Intent();
                         intentAjustes.setClass(MainActivity.this, AjustesActivity.class);
-                        //intentAjustes.putExtra("Usuario", usuario);
                         startActivity(intentAjustes);
                         break;
                     case R.id.nav_cerrar_sersion:
@@ -246,9 +226,8 @@ public class MainActivity extends AppCompatActivity {
     // Carga datos en el navigationView y cambia las preferencias del usuario
     private void cargaDatos(){
         // Asignar datos usuario
-        textEmail.setText(prefs.getString("email", "email@gmail.com"));
         textNick.setText(prefs.getString("nick", "Nick"));
-        //textFecha.setText(getResources().getString(R.string.ultima_busqueda) + " " + prefs.getString("fecha_Actualizacion", "Fecha"));
+        textEmail.setText(prefs.getString("email", "email@gmail.com"));
 
         prefsManager = PreferenceManager.getDefaultSharedPreferences(MainActivity.this);
 
@@ -267,16 +246,16 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    // A través de la url se descarga el fichero
+    /*// A través de la url se descarga el fichero
     public void guardar() {
 
         String url = "https://geoportalgasolineras.es/resources/files/preciosEESS_es.xls";
         File direc = new File(getFilesDir(),"preciosEESS_es.xls");
 
         downloadFile(url, direc);
-    }
+    }*/
 
-    private static void downloadFile(String url, File outputFile) {
+    /*private static void downloadFile(String url, File outputFile) {
         try {
             if (android.os.Build.VERSION.SDK_INT > 9) {
                 StrictMode.ThreadPolicy policy =
@@ -303,9 +282,9 @@ public class MainActivity extends AppCompatActivity {
         } catch (IOException e) {
             return; // swallow a 404
         }
-    }
+    }*/
 
-    // Una vez descargado el fichero, obtenemos los datos para almacenarlos en la BBDD
+    /*// Una vez descargado el fichero, obtenemos los datos para almacenarlos en la BBDD
     public void leer() {
         ContentValues reg = new ContentValues();
 
@@ -415,12 +394,6 @@ public class MainActivity extends AppCompatActivity {
         } catch (Exception e) {
             e.printStackTrace();
         }
-    }
-
-    public String cambiarComaPunt(String conComa){
-        String conPunto = conComa.replaceAll(",", ".");
-        return conPunto;
-
-    }
+    }*/
 
 }
