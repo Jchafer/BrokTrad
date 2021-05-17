@@ -29,7 +29,6 @@ public class DatosFragment extends Fragment {
     private Gasolinera gasolinera;
     private Cursor cursor;
     private String email;
-    //private FirebaseFirestore db = FirebaseFirestore.getInstance();
 
     public DatosFragment() {
         // Required empty public constructor

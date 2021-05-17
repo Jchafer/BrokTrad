@@ -24,6 +24,7 @@ import project.broktrad.pojo.Gasolinera;
 import project.broktrad.pojo.GasolinerasJson;
 import project.broktrad.pojo.Municipio;
 import project.broktrad.service.ApiService;
+import project.broktrad.utilities.Validaciones;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -66,9 +67,8 @@ public class BuscadorFragment extends Fragment {
                 gasolinerasSeleccionadas.clear();
 
                 // Obtenemos nombre introducido y comprobamos si existe en la lista de municipios
-
                 for (Municipio municipio : municipios) {
-                    if (cleanString(municipio.getNombre().toUpperCase()).equalsIgnoreCase(cleanString(municipioIntroducido.toUpperCase()))){
+                    if (Validaciones.cleanString(municipio.getNombre().toUpperCase()).equalsIgnoreCase(Validaciones.cleanString(municipioIntroducido.toUpperCase()))){
                         municipioSeleccionado = municipio;
                     }
                 }
@@ -173,13 +173,6 @@ public class BuscadorFragment extends Fragment {
                 Toast.makeText(getActivity(), R.string.sin_gasolineras, Toast.LENGTH_SHORT).show();
             }
         });
-    }
-
-    // Devuelve el mismo string que recibe, pero sin acentos
-    public static String cleanString(String texto) {
-        texto = Normalizer.normalize(texto, Normalizer.Form.NFD);
-        texto = texto.replaceAll("[\\p{InCombiningDiacriticalMarks}]", "");
-        return texto;
     }
 
 }

@@ -18,7 +18,6 @@ import project.broktrad.pojo.Gasolinera;
 
 public class GasolinerasFragment extends Fragment {
 
-    //private ArrayList<Gasolinera> gasolineras;
     private ArrayList<Gasolinera> gasolinerasApi;
 
     public GasolinerasFragment() {
@@ -33,7 +32,6 @@ public class GasolinerasFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        //gasolineras = (ArrayList<Gasolinera>) getArguments().get("Gasolineras");
         gasolinerasApi = (ArrayList<Gasolinera>) getArguments().get("Gasolineras");
 
         View myInflatedView = inflater.inflate(R.layout.fragment_gasolineras, container, false);

@@ -8,14 +8,13 @@ import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 
-import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.os.Bundle;
-import android.os.StrictMode;
 import android.preference.PreferenceManager;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
@@ -23,37 +22,25 @@ import android.widget.Toast;
 
 import com.google.android.material.navigation.NavigationView;
 
-import org.apache.poi.hssf.usermodel.HSSFCell;
-import org.apache.poi.hssf.usermodel.HSSFRow;
-import org.apache.poi.hssf.usermodel.HSSFSheet;
-import org.apache.poi.hssf.usermodel.HSSFWorkbook;
-import org.apache.poi.poifs.filesystem.POIFSFileSystem;
-import org.apache.poi.ss.usermodel.Cell;
-import org.apache.poi.ss.usermodel.Row;
-
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.URL;
-import java.net.URLConnection;
+import java.text.DecimalFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Iterator;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.List;
 import java.util.Locale;
 
 import project.broktrad.R;
 import project.broktrad.bd.MiBD;
 import project.broktrad.dao.FavoritoDAO;
-import project.broktrad.dao.GasolineraDAOBorrar;
 import project.broktrad.fragment.BuscadorFragment;
 import project.broktrad.fragment.DatosFragment;
 import project.broktrad.fragment.GasolinerasFragment;
+import project.broktrad.fragment.GraficoFragment;
 import project.broktrad.pojo.Gasolinera;
 import project.broktrad.pojo.GasolinerasJson;
 import project.broktrad.service.ApiService;
+import project.broktrad.utilities.Validaciones;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -69,7 +56,6 @@ public class MainActivity extends AppCompatActivity {
     private TextView textNick;
     private SharedPreferences prefs;
     private Fragment frgBuscador;
-    private Fragment datosFragment;
     private FavoritoDAO favoritoDAO;
     private MiBD miBD;
     private SharedPreferences prefsManager;
@@ -160,28 +146,13 @@ public class MainActivity extends AppCompatActivity {
                         }
                         drawerLayout.closeDrawer(GravityCompat.START);
                         break;
-                    /*case R.id.nav_actualizar:
-                        AlertDialog.Builder dialogo = new AlertDialog.Builder(MainActivity.this);
-                        dialogo.setTitle("Actualización");
-                        dialogo.setMessage("¿Quieres actualizar la base de datos? Esto conllevará un tiempo");
-                        dialogo.setCancelable(false);
-                        dialogo.setPositiveButton("Confirmar", new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialogo1, int id) {
-                                guardar();
-                                leer();
-                                Toast.makeText(MainActivity.this, R.string.datos_actualizados, Toast.LENGTH_LONG).show();
-                                Toast.makeText(MainActivity.this, prefs.getString("fecha_Actualizacion", String.valueOf(R.string.no_disponible)), Toast.LENGTH_LONG).show();
-                                cargaDatos();
-                            }
-                        });
-                        dialogo.setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialogo1, int id) {
-                                Toast.makeText(MainActivity.this, R.string.actualizacion_cancelada, Toast.LENGTH_SHORT).show();
-                            }
-                        });
-                        dialogo.show();
+                    case R.id.nav_historico:
+                        //getHistoricoValencia();
+                        Fragment frgGrafico = new GraficoFragment();
+                        getSupportFragmentManager().beginTransaction().replace(R.id.contenedor, frgGrafico)
+                                .addToBackStack(null).commit();
                         drawerLayout.closeDrawer(GravityCompat.START);
-                        return true;*/
+                        break;
                     case R.id.nav_ajustes:
                         Intent intentAjustes = new Intent();
                         intentAjustes.setClass(MainActivity.this, AjustesActivity.class);
@@ -196,8 +167,6 @@ public class MainActivity extends AppCompatActivity {
                 return true;
             }
         });
-
-        datosFragment = new DatosFragment();
 
         // Creación del fragment de gasolineras
         frgBuscador = new BuscadorFragment();
@@ -244,6 +213,98 @@ public class MainActivity extends AppCompatActivity {
             config.locale = localizacion;
             getBaseContext().getResources().updateConfiguration(config, getBaseContext().getResources().getDisplayMetrics());
         }
+    }
+
+    private void getHistoricoValencia() {
+        SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
+        Calendar c = Calendar.getInstance();
+        ArrayList<String> fechas = new ArrayList<>();
+        ArrayList<Float> mediaPrecioGasolina95 = new ArrayList<>();
+        ArrayList<Float> mediaPrecioGasolina98 = new ArrayList<>();
+        ArrayList<Float> mediaPrecioGasoleoA = new ArrayList<>();
+        ArrayList<Float> mediaPrecioGasoleoP = new ArrayList<>();
+        for (int i = 1; i <= 7; i++) {
+            c.add(Calendar.DATE, -2);
+            Date ultimaFecha = c.getTime();
+            String fecha = sdf.format(ultimaFecha);
+            fechas.add(fecha);
+        }
+        Log.e("Fechas", fechas.toString());
+        for (int j = 0; j < 7; j++) {
+            Retrofit retrofit = new Retrofit.Builder()
+                    .baseUrl("https://sedeaplicaciones.minetur.gob.es/")
+                    .addConverterFactory(GsonConverterFactory.create())
+                    .build();
+            ApiService apiService = retrofit.create(ApiService.class);
+            Call<GasolinerasJson> call = apiService.getHistoricoValencia(fechas.get(j));
+            call.enqueue(new Callback<GasolinerasJson>() {
+
+                @Override
+                public void onResponse(Call<GasolinerasJson> call, Response<GasolinerasJson> response) {
+                    DecimalFormat df2 = new DecimalFormat("#.##");
+
+                    float precioGasolina95 = 0;
+                    int contGasolina95 = 0;
+                    float precioGasolina98 = 0;
+                    int contGasolina98 = 0;
+                    float precioGasoleoA = 0;
+                    int contGasoleoA = 0;
+                    float precioGasoleoP = 0;
+                    int contGasoleoP = 0;
+                    for(Gasolinera gasolinera : response.body().getListaGasolineras()) {
+                        if (!gasolinera.getPrecioGasolina95().isEmpty()) {
+                            precioGasolina95 += Float.parseFloat(Validaciones.cambiarComaPunt(gasolinera.getPrecioGasolina95()));
+                            contGasolina95++;
+                        }
+                        if (!gasolinera.getPrecioGasolina98().isEmpty()) {
+                            precioGasolina98 += Float.parseFloat(Validaciones.cambiarComaPunt(gasolinera.getPrecioGasolina98()));
+                            contGasolina98++;
+                        }
+                        if (!gasolinera.getPrecioGasoleoA().isEmpty()) {
+                            precioGasoleoA += Float.parseFloat(Validaciones.cambiarComaPunt(gasolinera.getPrecioGasoleoA()));
+                            contGasoleoA++;
+                        }
+                        if (!gasolinera.getPrecioGasoleoPremium().isEmpty()) {
+                            precioGasoleoP += Float.parseFloat(Validaciones.cambiarComaPunt(gasolinera.getPrecioGasoleoPremium()));
+                            contGasoleoP++;
+                        }
+                    }
+
+                    Log.e("Precio", String.valueOf(precioGasolina95 + " -> " + contGasolina95 + "\n" +
+                                                        precioGasolina98 + " -> " + contGasolina98 + "\n" +
+                                                        precioGasoleoA + " -> " + contGasoleoA + "\n" +
+                                                        precioGasoleoP + " -> " + contGasoleoP));
+                    float mediaGasolina95 = precioGasolina95 / contGasolina95;
+                    float mediaGasolina98 = precioGasolina98 / contGasolina98;
+                    float mediaGasoleoA = precioGasoleoA / contGasoleoA;
+                    float mediaGasoleoP = precioGasoleoP / contGasoleoP;
+
+                    mediaPrecioGasolina95.add(mediaGasolina95);
+                    mediaPrecioGasolina98.add(mediaGasolina95);
+                    mediaPrecioGasoleoA.add(mediaGasolina95);
+                    mediaPrecioGasoleoP.add(mediaGasolina95);
+
+                    Log.e("Media", df2.format(mediaGasolina95) + " " + df2.format(mediaGasolina98) + " " + df2.format(mediaGasoleoA) + " " + df2.format(mediaGasoleoP));
+                }
+                @Override
+                public void onFailure(Call<GasolinerasJson> call, Throwable t) {
+                    Toast.makeText(getApplication(), R.string.sin_gasolineras, Toast.LENGTH_SHORT).show();
+                }
+            });
+        }
+
+        Fragment frgGrafico = new GraficoFragment();
+        Bundle args = new Bundle();
+        args.putSerializable("fechas", fechas);
+        args.putSerializable("mediaPrecioGasolina95", mediaPrecioGasolina95);
+        args.putSerializable("mediaPrecioGasolina98", mediaPrecioGasolina98);
+        args.putSerializable("mediaPrecioGasoleoA", mediaPrecioGasoleoA);
+        args.putSerializable("mediaPrecioGasoleoP", mediaPrecioGasoleoP);
+        frgGrafico.setArguments(args);
+        getSupportFragmentManager().beginTransaction().replace(R.id.contenedor, frgGrafico)
+                .addToBackStack(null).commit();
+        drawerLayout.closeDrawer(GravityCompat.START);
+
     }
 
     /*// A través de la url se descarga el fichero

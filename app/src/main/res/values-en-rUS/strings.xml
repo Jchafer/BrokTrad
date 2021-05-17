@@ -68,4 +68,5 @@
     <string name="permission_rationale_location">Location permission</string>
     <string name="gasolinera_cercana">Nearest gas station</string>
     <string name="ubicacion_actual">Current location</string>
+    <string name="menu_historico">Historical</string>
 </resources>

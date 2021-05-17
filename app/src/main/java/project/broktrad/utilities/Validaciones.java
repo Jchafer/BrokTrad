@@ -1,5 +1,6 @@
 package project.broktrad.utilities;
 
+import java.text.Normalizer;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -38,8 +39,15 @@ public abstract class Validaciones {
     }
 
     // Cambiar las comas por puntos
-    public String cambiarComaPunt(String conComa){
+    public static String cambiarComaPunt(String conComa){
         String conPunto = conComa.replaceAll(",", ".");
         return conPunto;
+    }
+
+    // Devuelve el mismo string que recibe, pero sin acentos
+    public static String cleanString(String texto) {
+        texto = Normalizer.normalize(texto, Normalizer.Form.NFD);
+        texto = texto.replaceAll("[\\p{InCombiningDiacriticalMarks}]", "");
+        return texto;
     }
 }

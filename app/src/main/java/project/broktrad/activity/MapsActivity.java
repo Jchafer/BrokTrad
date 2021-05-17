@@ -32,6 +32,7 @@ import java.util.List;
 import project.broktrad.R;
 import project.broktrad.pojo.Gasolinera;
 import project.broktrad.utilities.PermissionUtils;
+import project.broktrad.utilities.Validaciones;
 
 public class MapsActivity extends AppCompatActivity implements OnMyLocationButtonClickListener,
         OnMyLocationClickListener,
@@ -63,8 +64,8 @@ public class MapsActivity extends AppCompatActivity implements OnMyLocationButto
         mMap = googleMap;
         if (gasolinera != null) {
 
-            double lat = Double.parseDouble(gasolinera.getLatitud().replaceAll(",", "."));
-            double lng = Double.parseDouble(gasolinera.getLongitud().replaceAll(",", "."));
+            double lat = Double.parseDouble(Validaciones.cambiarComaPunt(gasolinera.getLatitud()));
+            double lng = Double.parseDouble(Validaciones.cambiarComaPunt(gasolinera.getLongitud()));
 
             // Añade un marcador con la gasolinera recibida
             LatLng gasolineraMarker = new LatLng(lat, lng);
@@ -83,7 +84,6 @@ public class MapsActivity extends AppCompatActivity implements OnMyLocationButto
                     .addOnSuccessListener(this, new OnSuccessListener<Location>() {
                         @Override
                         public void onSuccess(Location location) {
-                            // Got last known location. In some rare situations this can be null.
                             if (location != null) {
                                 LatLng miPos = new LatLng(location.getLatitude(), location.getLongitude());
                                 Gasolinera gasolineraMasCercana = null;
@@ -93,8 +93,8 @@ public class MapsActivity extends AppCompatActivity implements OnMyLocationButto
                                 LatLng posicionActual = null;
 
                                 for(int i=0; i < gasolineras.size(); i++) {
-                                    latitud = Double.parseDouble(gasolineras.get(i).getLatitud().replaceAll(",", "."));
-                                    longitud = Double.parseDouble(gasolineras.get(i).getLongitud().replaceAll(",", "."));
+                                    latitud = Double.parseDouble(Validaciones.cambiarComaPunt(gasolineras.get(i).getLatitud()));
+                                    longitud = Double.parseDouble(Validaciones.cambiarComaPunt(gasolineras.get(i).getLongitud()));
                                     posicionActual = new LatLng(latitud, longitud);
                                     double distancia = SphericalUtil.computeDistanceBetween(miPos, posicionActual);
                                     if (distanciaActual > distancia) {
@@ -102,8 +102,8 @@ public class MapsActivity extends AppCompatActivity implements OnMyLocationButto
                                         distanciaActual = distancia;
                                     }
                                 }
-                                double lat = Double.parseDouble(gasolineraMasCercana.getLatitud().replaceAll(",", "."));
-                                double lng = Double.parseDouble(gasolineraMasCercana.getLongitud().replaceAll(",", "."));
+                                double lat = Double.parseDouble(Validaciones.cambiarComaPunt(gasolineraMasCercana.getLatitud()));
+                                double lng = Double.parseDouble(Validaciones.cambiarComaPunt(gasolineraMasCercana.getLongitud()));
 
                                 LatLng gasolineraSelecLatLng = new LatLng(lat, lng);
                                 mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(gasolineraSelecLatLng, 16.0f));
@@ -111,7 +111,7 @@ public class MapsActivity extends AppCompatActivity implements OnMyLocationButto
 
                                 mMap.addMarker(new MarkerOptions().position(gasolineraSelecLatLng).title("Gasolinera " +
                                         gasolineraMasCercana.getRotulo()).snippet(gasolineraMasCercana.getMunicipio() + " " + gasolineraMasCercana.getDireccion()));
-                                Polyline line = mMap.addPolyline(new PolylineOptions()
+                                mMap.addPolyline(new PolylineOptions()
                                         .add(new LatLng(location.getLatitude(), location.getLongitude()), new LatLng(lat, lng))
                                         .width(10)
                                         .color(Color.RED));

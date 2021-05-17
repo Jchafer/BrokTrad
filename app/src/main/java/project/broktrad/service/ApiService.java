@@ -16,6 +16,7 @@ public interface ApiService {
     String API_ROUTE_MUNICIPIOS_VALENCIA = "ServiciosRESTCarburantes/PreciosCarburantes/Listados/MunicipiosPorProvincia/46";
     String API_ROUTE_GASOLINERAS_VALENCIA = "ServiciosRESTCarburantes/PreciosCarburantes/EstacionesTerrestres/FiltroProvincia/46";
     String API_ROUTE_GASOLINERAS_MUNICIPIO = "ServiciosRESTCarburantes/PreciosCarburantes/EstacionesTerrestres/FiltroMunicipio/{idMunicipio}";
+    String API_ROUTE_HISTORICO_VALENCIA = "ServiciosRESTCarburantes/PreciosCarburantes/EstacionesTerrestresHist/FiltroProvincia/{fecha}/46";
 
     @GET(API_ROUTE_MUNICIPIOS_VALENCIA)
     Call<List<Municipio>> getMunicipios();
@@ -25,5 +26,8 @@ public interface ApiService {
 
     @GET(API_ROUTE_GASOLINERAS_VALENCIA)
     Call<GasolinerasJson> getGasolinerasValencia();
+
+    @GET(API_ROUTE_HISTORICO_VALENCIA)
+    Call<GasolinerasJson> getHistoricoValencia(@Path("fecha") String fecha);
 
 }

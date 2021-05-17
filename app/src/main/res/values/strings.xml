@@ -67,4 +67,5 @@
     <string name="permission_rationale_location">Permiso de localización</string>
     <string name="gasolinera_cercana">Gasolinera más cercana</string>
     <string name="ubicacion_actual">Ubicación actual</string>
+    <string name="menu_historico">Histórico</string>
 </resources>
