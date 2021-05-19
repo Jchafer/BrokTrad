@@ -147,7 +147,6 @@ public class MainActivity extends AppCompatActivity {
                         drawerLayout.closeDrawer(GravityCompat.START);
                         break;
                     case R.id.nav_historico:
-                        //getHistoricoValencia();
                         Fragment frgGrafico = new GraficoFragment();
                         getSupportFragmentManager().beginTransaction().replace(R.id.contenedor, frgGrafico)
                                 .addToBackStack(null).commit();
@@ -213,98 +212,6 @@ public class MainActivity extends AppCompatActivity {
             config.locale = localizacion;
             getBaseContext().getResources().updateConfiguration(config, getBaseContext().getResources().getDisplayMetrics());
         }
-    }
-
-    private void getHistoricoValencia() {
-        SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
-        Calendar c = Calendar.getInstance();
-        ArrayList<String> fechas = new ArrayList<>();
-        ArrayList<Float> mediaPrecioGasolina95 = new ArrayList<>();
-        ArrayList<Float> mediaPrecioGasolina98 = new ArrayList<>();
-        ArrayList<Float> mediaPrecioGasoleoA = new ArrayList<>();
-        ArrayList<Float> mediaPrecioGasoleoP = new ArrayList<>();
-        for (int i = 1; i <= 7; i++) {
-            c.add(Calendar.DATE, -2);
-            Date ultimaFecha = c.getTime();
-            String fecha = sdf.format(ultimaFecha);
-            fechas.add(fecha);
-        }
-        Log.e("Fechas", fechas.toString());
-        for (int j = 0; j < 7; j++) {
-            Retrofit retrofit = new Retrofit.Builder()
-                    .baseUrl("https://sedeaplicaciones.minetur.gob.es/")
-                    .addConverterFactory(GsonConverterFactory.create())
-                    .build();
-            ApiService apiService = retrofit.create(ApiService.class);
-            Call<GasolinerasJson> call = apiService.getHistoricoValencia(fechas.get(j));
-            call.enqueue(new Callback<GasolinerasJson>() {
-
-                @Override
-                public void onResponse(Call<GasolinerasJson> call, Response<GasolinerasJson> response) {
-                    DecimalFormat df2 = new DecimalFormat("#.##");
-
-                    float precioGasolina95 = 0;
-                    int contGasolina95 = 0;
-                    float precioGasolina98 = 0;
-                    int contGasolina98 = 0;
-                    float precioGasoleoA = 0;
-                    int contGasoleoA = 0;
-                    float precioGasoleoP = 0;
-                    int contGasoleoP = 0;
-                    for(Gasolinera gasolinera : response.body().getListaGasolineras()) {
-                        if (!gasolinera.getPrecioGasolina95().isEmpty()) {
-                            precioGasolina95 += Float.parseFloat(Validaciones.cambiarComaPunt(gasolinera.getPrecioGasolina95()));
-                            contGasolina95++;
-                        }
-                        if (!gasolinera.getPrecioGasolina98().isEmpty()) {
-                            precioGasolina98 += Float.parseFloat(Validaciones.cambiarComaPunt(gasolinera.getPrecioGasolina98()));
-                            contGasolina98++;
-                        }
-                        if (!gasolinera.getPrecioGasoleoA().isEmpty()) {
-                            precioGasoleoA += Float.parseFloat(Validaciones.cambiarComaPunt(gasolinera.getPrecioGasoleoA()));
-                            contGasoleoA++;
-                        }
-                        if (!gasolinera.getPrecioGasoleoPremium().isEmpty()) {
-                            precioGasoleoP += Float.parseFloat(Validaciones.cambiarComaPunt(gasolinera.getPrecioGasoleoPremium()));
-                            contGasoleoP++;
-                        }
-                    }
-
-                    Log.e("Precio", String.valueOf(precioGasolina95 + " -> " + contGasolina95 + "\n" +
-                                                        precioGasolina98 + " -> " + contGasolina98 + "\n" +
-                                                        precioGasoleoA + " -> " + contGasoleoA + "\n" +
-                                                        precioGasoleoP + " -> " + contGasoleoP));
-                    float mediaGasolina95 = precioGasolina95 / contGasolina95;
-                    float mediaGasolina98 = precioGasolina98 / contGasolina98;
-                    float mediaGasoleoA = precioGasoleoA / contGasoleoA;
-                    float mediaGasoleoP = precioGasoleoP / contGasoleoP;
-
-                    mediaPrecioGasolina95.add(mediaGasolina95);
-                    mediaPrecioGasolina98.add(mediaGasolina95);
-                    mediaPrecioGasoleoA.add(mediaGasolina95);
-                    mediaPrecioGasoleoP.add(mediaGasolina95);
-
-                    Log.e("Media", df2.format(mediaGasolina95) + " " + df2.format(mediaGasolina98) + " " + df2.format(mediaGasoleoA) + " " + df2.format(mediaGasoleoP));
-                }
-                @Override
-                public void onFailure(Call<GasolinerasJson> call, Throwable t) {
-                    Toast.makeText(getApplication(), R.string.sin_gasolineras, Toast.LENGTH_SHORT).show();
-                }
-            });
-        }
-
-        Fragment frgGrafico = new GraficoFragment();
-        Bundle args = new Bundle();
-        args.putSerializable("fechas", fechas);
-        args.putSerializable("mediaPrecioGasolina95", mediaPrecioGasolina95);
-        args.putSerializable("mediaPrecioGasolina98", mediaPrecioGasolina98);
-        args.putSerializable("mediaPrecioGasoleoA", mediaPrecioGasoleoA);
-        args.putSerializable("mediaPrecioGasoleoP", mediaPrecioGasoleoP);
-        frgGrafico.setArguments(args);
-        getSupportFragmentManager().beginTransaction().replace(R.id.contenedor, frgGrafico)
-                .addToBackStack(null).commit();
-        drawerLayout.closeDrawer(GravityCompat.START);
-
     }
 
     /*// A través de la url se descarga el fichero

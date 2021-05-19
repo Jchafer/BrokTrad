@@ -1,5 +1,6 @@
 package project.broktrad.fragment;
 
+import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -32,6 +33,8 @@ public class GasolinerasFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        getActivity().setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+        setRetainInstance(true);
         gasolinerasApi = (ArrayList<Gasolinera>) getArguments().get("Gasolineras");
 
         View myInflatedView = inflater.inflate(R.layout.fragment_gasolineras, container, false);
