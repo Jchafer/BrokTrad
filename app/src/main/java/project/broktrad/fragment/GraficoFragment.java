@@ -2,6 +2,7 @@ package project.broktrad.fragment;
 
 import android.content.pm.ActivityInfo;
 import android.graphics.Color;
+import android.graphics.Paint;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -11,7 +12,9 @@ import android.widget.Toast;
 
 import androidx.fragment.app.Fragment;
 
+import com.github.mikephil.charting.charts.Chart;
 import com.github.mikephil.charting.charts.LineChart;
+import com.github.mikephil.charting.components.Description;
 import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
@@ -135,11 +138,11 @@ public class GraficoFragment extends Fragment {
             ArrayList<Entry> dataGasolina98 = new ArrayList<Entry>();
             ArrayList<Entry> dataGasoleoA = new ArrayList<Entry>();
             ArrayList<Entry> dataGasoleoP = new ArrayList<Entry>();
-            for (int i = 0; i<6; i++){
-                dataGasolina95.add(new Entry((float) i,(float)mediaPrecioGasolina95.get(i)));
-                dataGasolina98.add(new Entry((float) i,(float)mediaPrecioGasolina98.get(i)));
-                dataGasoleoA.add(new Entry((float) i,(float)mediaPrecioGasoleoA.get(i)));
-                dataGasoleoP.add(new Entry((float) i,(float)mediaPrecioGasoleoP.get(i)));
+            for (int i = 1; i <= 7; i++){
+                dataGasolina95.add(new Entry((float) i,(float)mediaPrecioGasolina95.get(i-1)));
+                dataGasolina98.add(new Entry((float) i,(float)mediaPrecioGasolina98.get(i-1)));
+                dataGasoleoA.add(new Entry((float) i,(float)mediaPrecioGasoleoA.get(i-1)));
+                dataGasoleoP.add(new Entry((float) i,(float)mediaPrecioGasoleoP.get(i-1)));
             }
 
             // Unimos los datos al data set y le damos estilo
@@ -169,7 +172,11 @@ public class GraficoFragment extends Fragment {
             lineData.addDataSet(lineGasolina98);
             lineData.addDataSet(lineGasoleoA);
             lineData.addDataSet(lineGasoleoP);
+            lineData.setDrawValues(false);
             lineChart.setData(lineData);
+
+            lineChart.invalidate();
+            lineChart.animateX(3500);
             return myInflatedView;
         }
         return null;

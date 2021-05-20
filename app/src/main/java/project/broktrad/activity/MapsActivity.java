@@ -180,4 +180,9 @@ public class MapsActivity extends AppCompatActivity implements OnMyLocationButto
         PermissionUtils.PermissionDeniedDialog
                 .newInstance(true).show(getSupportFragmentManager(), "dialog");
     }
+
+    @Override
+    public void onBackPressed() {
+        this.finish();
+    }
 }
