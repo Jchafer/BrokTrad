@@ -22,7 +22,6 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
-import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.maps.android.SphericalUtil;
@@ -62,8 +61,8 @@ public class MapsActivity extends AppCompatActivity implements OnMyLocationButto
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
+        // En el caso de que gasolinera tenga valor, se accedera a ella
         if (gasolinera != null) {
-
             double lat = Double.parseDouble(Validaciones.cambiarComaPunt(gasolinera.getLatitud()));
             double lng = Double.parseDouble(Validaciones.cambiarComaPunt(gasolinera.getLongitud()));
 
@@ -73,6 +72,8 @@ public class MapsActivity extends AppCompatActivity implements OnMyLocationButto
                     gasolinera.getRotulo()).snippet(gasolinera.getMunicipio() + " " + gasolinera.getDireccion()));
             mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(gasolineraMarker, 16.0f));
             mMap.setMapType(GoogleMap.MAP_TYPE_HYBRID);
+        // En el caso de que gasolinera no tenga valor, significa que se está recibiendo una lista
+        // de gasolineras para obtener la que está más cercana a la posición actual
         } else {
             mMap.setOnMyLocationButtonClickListener(this);
             mMap.setOnMyLocationClickListener(this);
@@ -90,13 +91,13 @@ public class MapsActivity extends AppCompatActivity implements OnMyLocationButto
                                 double distanciaActual = Double.MAX_VALUE;
                                 double latitud;
                                 double longitud;
-                                LatLng posicionActual = null;
+                                LatLng posGasolinera = null;
 
                                 for(int i=0; i < gasolineras.size(); i++) {
                                     latitud = Double.parseDouble(Validaciones.cambiarComaPunt(gasolineras.get(i).getLatitud()));
                                     longitud = Double.parseDouble(Validaciones.cambiarComaPunt(gasolineras.get(i).getLongitud()));
-                                    posicionActual = new LatLng(latitud, longitud);
-                                    double distancia = SphericalUtil.computeDistanceBetween(miPos, posicionActual);
+                                    posGasolinera = new LatLng(latitud, longitud);
+                                    double distancia = SphericalUtil.computeDistanceBetween(miPos, posGasolinera);
                                     if (distanciaActual > distancia) {
                                         gasolineraMasCercana = gasolineras.get(i);
                                         distanciaActual = distancia;

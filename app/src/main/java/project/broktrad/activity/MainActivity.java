@@ -14,7 +14,6 @@ import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
@@ -22,25 +21,18 @@ import android.widget.Toast;
 
 import com.google.android.material.navigation.NavigationView;
 
-import java.text.DecimalFormat;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
 import java.util.Locale;
 
 import project.broktrad.R;
 import project.broktrad.bd.MiBD;
 import project.broktrad.dao.FavoritoDAO;
 import project.broktrad.fragment.BuscadorFragment;
-import project.broktrad.fragment.DatosFragment;
 import project.broktrad.fragment.GasolinerasFragment;
 import project.broktrad.fragment.GraficoFragment;
 import project.broktrad.pojo.Gasolinera;
 import project.broktrad.pojo.GasolinerasJson;
 import project.broktrad.service.ApiService;
-import project.broktrad.utilities.Validaciones;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;

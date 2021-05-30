@@ -15,7 +15,7 @@ public class MiBD extends SQLiteOpenHelper implements Serializable {
     // Nombre de la base de datos
     private static final String database = "Gasolineras_precios";
     // Versión de la base de datos
-    private static final int version = 14;
+    private static final int version = 16;
     private String sqlCreacionFavoritos = "CREATE TABLE favoritos (id_gasol TEXT PRIMARY KEY, email TEXT);";
 
     private static MiBD instance = null;
@@ -74,7 +74,7 @@ public class MiBD extends SQLiteOpenHelper implements Serializable {
 
     private void insercionDatos(SQLiteDatabase db){
         // Insertamos los datos de prueba
-        db.execSQL("INSERT INTO favoritos (id_gasol, email) VALUES ('4061', 'admin@admin.com');");
+        db.execSQL("INSERT INTO favoritos (id_gasol, email) VALUES ('4061', 'modemo@modemo.com');");
         db.execSQL("INSERT INTO favoritos (id_gasol, email) VALUES ('11954', 'admin@admin.com');");
     }
 

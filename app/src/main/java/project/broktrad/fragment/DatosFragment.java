@@ -17,9 +17,6 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
-//import com.google.api.core.ApiFuture;
-//import com.google.firebase.firestore.FirebaseFirestore;
-
 import project.broktrad.activity.MapsActivity;
 import project.broktrad.R;
 import project.broktrad.dao.FavoritoDAO;
